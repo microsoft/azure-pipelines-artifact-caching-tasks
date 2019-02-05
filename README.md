@@ -1,7 +1,7 @@
 # Azure Pipelines Artifact Caching Tasks
 [![Build Status](https://dev.azure.com/1es-cat/build-cache/_apis/build/status/erdennis13.restore-cache-task?branchName=master)](https://dev.azure.com/1es-cat/build-cache/_build/latest?definitionId=15&branchName=master)
 
-This repo contains the tasks that enable caching intermediate artifacts from an Azure Pipelines build using Universal Artifacts.
+This repo contains the tasks that enable the caching of intermediate artifacts from an Azure Pipelines build using Universal Artifacts.
 
 ## How to use
 
@@ -29,10 +29,10 @@ Conceptually, this snippet creates a lookup key from the `keyfile` argument and 
 
 Inputs:
 - `keyfile`: The file or pattern of files to use for creating the lookup key of the cache. Due to the nature of `node_modules` potentially having their own `yarn.lock` file, this snippet explicitly excludes that pattern to ensure there is a consistent lookup key before and after package restoration.
-- `targetfolder`: The file/folder or pattern of files/folders that you desire to cache. The matching files/folders will be represented as the universal package that is uploaded to your Azure DevOps artifact feed.
-- `vstsFeed`: The guid representing the Artifact feed in Azure DevOps meant to store the build's caches.
+- `targetfolder`: The file/folder or pattern of files/folders that you want to cache. The matching files/folders will be represented as the universal package that is uploaded to your Azure DevOps artifact feed.
+- `vstsFeed`: The guid representing the artifact feed in Azure DevOps meant to store the build's caches.
 
-If you do not desire to add 2 build steps to your build definition, you can also use a single task that implicitly adds the `SaveCache` task at the end of the build. E.g.
+If you do not want to add two build steps to your build definition, you can also use a single task that implicitly adds the `SaveCache` task at the end of the build. For example:
 
 ```yaml
 - task: EthanDennis-Microsoft.RestoreCacheUtilities.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
@@ -48,9 +48,9 @@ If you do not desire to add 2 build steps to your build definition, you can also
 
 ## Optimistic cache restoration
 
-If a cache was restored successfully, the build variable `CacheRestored` is set to true. This can provide a further perfomance boost by optionally skipping package install commands entirely.
+If a cache was restored successfully, the build variable `CacheRestored` is set to `true`. This can provide a further perfomance boost by optionally skipping package install commands entirely.
 
-In the below example, the 'yarn' task will only run if there was not a cache hit. While this can provide faster builds, it may not be suitable for production builds.
+In the following example, the 'yarn' task will only run if there was not a cache hit. Although this can provide faster builds, it may not be suitable for production builds.
 ```yaml
 - task: EthanDennis-Microsoft.RestoreCacheUtilities.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
   inputs:
@@ -100,7 +100,7 @@ npm install
 
 ### Build
 
-The instructions below demonstrate how to build and test either all or a specific task.  The output will be sent to
+The following instructions demonstrate how to build and test either all or a specific task. The output will be sent to
 the `_build` directory.  You can then use the tfx client to upload this to your server for testing.
 
 The build will also generate a `task.loc.json` and an english strings file under `Strings` in your source tree. You should check these back in. Another localization process will create the other strings files.
