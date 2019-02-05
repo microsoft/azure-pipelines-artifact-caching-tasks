@@ -1,0 +1,109 @@
+{
+  "id": "2474c41d-d93a-4815-9d4c-3b9f19b11cb0",
+  "name": "SaveCache",
+  "friendlyName": "ms-resource:loc.friendlyName",
+  "description": "ms-resource:loc.description",
+  "helpMarkDown": "ms-resource:loc.helpMarkDown",
+  "category": "Utility",
+  "author": "Ethan Dennis",
+  "version": {
+    "Major": 1,
+    "Minor": 5,
+    "Patch": 13
+  },
+  "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
+  "inputs": [
+    {
+      "name": "keyfile",
+      "type": "filePath",
+      "label": "ms-resource:loc.input.label.keyfile",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "ms-resource:loc.input.help.keyfile"
+    },
+    {
+      "name": "targetfolder",
+      "type": "filePath",
+      "label": "ms-resource:loc.input.label.targetfolder",
+      "defaultValue": "",
+      "required": true,
+      "helpMarkDown": "ms-resource:loc.input.help.targetfolder"
+    },
+    {
+      "name": "feedList",
+      "aliases": [
+        "vstsFeed"
+      ],
+      "type": "pickList",
+      "label": "ms-resource:loc.input.label.feedList",
+      "defaultValue": "",
+      "required": "true"
+    },
+    {
+      "name": "verbosity",
+      "type": "pickList",
+      "label": "ms-resource:loc.input.label.verbosity",
+      "defaultValue": "None",
+      "helpMarkDown": "ms-resource:loc.input.help.verbosity",
+      "required": "false",
+      "groupName": "advanced",
+      "options": {
+        "None": "None",
+        "Trace": "Trace",
+        "Debug": "Debug",
+        "Information": "Information",
+        "Warning": "Warning",
+        "Error": "Error",
+        "Critical": "Citical"
+      }
+    }
+  ],
+  "dataSourceBindings": [
+    {
+      "target": "feedList",
+      "endpointId": "tfs:feed",
+      "endpointUrl": "{{endpoint.url}}/_apis/packaging/feeds",
+      "resultSelector": "jsonpath:$.value[*]",
+      "resultTemplate": "{ \"Value\" : \"{{{id}}}\", \"DisplayValue\" : \"{{{name}}}\" }"
+    }
+  ],
+  "execution": {
+    "Node": {
+      "target": "savecache.js"
+    }
+  },
+  "messages": {
+    "PackagesDownloadedSuccessfully": "ms-resource:loc.messages.PackagesDownloadedSuccessfully",
+    "PackagesFailedToDownload": "ms-resource:loc.messages.PackagesFailedToDownload",
+    "ConnectingAs": "ms-resource:loc.messages.ConnectingAs",
+    "BuildIdentityPermissionsHint": "ms-resource:loc.messages.BuildIdentityPermissionsHint",
+    "CouldNotFindUniversalPackagesService": "ms-resource:loc.messages.CouldNotFindUniversalPackagesService",
+    "Error_NoValueFoundForEnvVar": "ms-resource:loc.messages.Error_NoValueFoundForEnvVar",
+    "PackagesPublishedSuccessfully": "ms-resource:loc.messages.PackagesPublishedSuccessfully",
+    "PackagesFailedToPublish": "ms-resource:loc.messages.PackagesFailedToPublish",
+    "UnknownFeedType": "ms-resource:loc.messages.UnknownFeedType",
+    "Error_NoSourceSpecifiedForPublish": "ms-resource:loc.messages.Error_NoSourceSpecifiedForPublish",
+    "Error_NoSourceSpecifiedForDownload": "ms-resource:loc.messages.Error_NoSourceSpecifiedForDownload",
+    "Error_UnexpectedErrorArtifactTool": "ms-resource:loc.messages.Error_UnexpectedErrorArtifactTool",
+    "Error_UnexpectedErrorArtifactToolDownload": "ms-resource:loc.messages.Error_UnexpectedErrorArtifactToolDownload",
+    "Info_DownloadDirectoryNotFound": "ms-resource:loc.messages.Info_DownloadDirectoryNotFound",
+    "Info_PublishDirectoryNotFound": "ms-resource:loc.messages.Info_PublishDirectoryNotFound",
+    "Error_CommandNotRecognized": "ms-resource:loc.messages.Error_CommandNotRecognized",
+    "Error_NoVersionWasFoundWhichMatches": "ms-resource:loc.messages.Error_NoVersionWasFoundWhichMatches",
+    "Error_AuthNotSupported": "ms-resource:loc.messages.Error_AuthNotSupported",
+    "Info_DownloadingArtifactTool": "ms-resource:loc.messages.Info_DownloadingArtifactTool",
+    "Info_Downloading": "ms-resource:loc.messages.Info_Downloading",
+    "Info_Publishing": "ms-resource:loc.messages.Info_Publishing",
+    "Info_UsingArtifactToolPublish": "ms-resource:loc.messages.Info_UsingArtifactToolPublish",
+    "Info_UsingArtifactToolDownload": "ms-resource:loc.messages.Info_UsingArtifactToolDownload",
+    "Info_ResolvedToolFromCache": "ms-resource:loc.messages.Info_ResolvedToolFromCache",
+    "Info_UsingToolPath": "ms-resource:loc.messages.Info_UsingToolPath",
+    "Info_UsingVersion": "ms-resource:loc.messages.Info_UsingVersion",
+    "FailedToGetPackageMetadata": "ms-resource:loc.messages.FailedToGetPackageMetadata",
+    "FailedToGetArtifactTool": "ms-resource:loc.messages.FailedToGetArtifactTool",
+    "Error_UnexpectedErrorFailedToGetToolMetadata": "ms-resource:loc.messages.Error_UnexpectedErrorFailedToGetToolMetadata",
+    "FailedToGetLatestPackageVersion": "ms-resource:loc.messages.FailedToGetLatestPackageVersion",
+    "Warn_CredentialsNotFound": "ms-resource:loc.messages.Warn_CredentialsNotFound",
+    "Error_UniversalPackagesNotSupportedOnPrem": "ms-resource:loc.messages.Error_UniversalPackagesNotSupportedOnPrem"
+  }
+}

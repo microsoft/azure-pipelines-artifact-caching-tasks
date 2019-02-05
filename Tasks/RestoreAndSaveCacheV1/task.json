@@ -1,0 +1,114 @@
+{
+    "id": "50759521-9c5f-4f40-9ae7-8f9876ba9439",
+    "name": "RestoreAndSaveCache",
+    "friendlyName": "Restore and save cache",
+    "description": "Restores and saves a folder given a specified key.",
+    "helpMarkDown": "",
+    "category": "Utility",
+    "author": "Ethan Dennis",
+    "version": {
+        "Major": 1,
+        "Minor": 5,
+        "Patch": 13
+    },
+    "instanceNameFormat": "Restore and save artifact based on: $(keyfile)",
+    "inputs": [
+        {
+            "name": "keyfile",
+            "type": "filePath",
+            "label": "Key file",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The filename or wildcard used as the key to lookup the cache folder. For example, for npm based projects this would be '**/package-lock.json'."
+        },
+        {
+            "name": "targetfolder",
+            "type": "filePath",
+            "label": "Target folder",
+            "defaultValue": "",
+            "required": true,
+            "helpMarkDown": "The folder/file or wildcard of items to cache. For example, node projects can cache packages with '**/node_modules, !**/node_modules/**/node_modules'."
+        },
+        {
+            "name": "feedList",
+            "aliases": [
+                "vstsFeed"
+            ],
+            "type": "pickList",
+            "label": "Feed",
+            "defaultValue": "",
+            "required": "true"
+        },
+        {
+            "name": "verbosity",
+            "type": "pickList",
+            "label": "Verbosity",
+            "defaultValue": "None",
+            "helpMarkDown": "Specifies the amount of detail displayed in the output.",
+            "required": "false",
+            "groupName": "advanced",
+            "options": {
+                "None": "None",
+                "Trace": "Trace",
+                "Debug": "Debug",
+                "Information": "Information",
+                "Warning": "Warning",
+                "Error": "Error",
+                "Critical": "Citical"
+            }
+        }
+    ],
+    "dataSourceBindings": [
+        {
+            "target": "feedList",
+            "endpointId": "tfs:feed",
+            "endpointUrl": "{{endpoint.url}}/_apis/packaging/feeds",
+            "resultSelector": "jsonpath:$.value[*]",
+            "resultTemplate": "{ \"Value\" : \"{{{id}}}\", \"DisplayValue\" : \"{{{name}}}\" }"
+        }
+    ],
+    "execution": {
+        "Node": {
+            "target": "restorecache.js"
+        }
+    },
+    "postjobexecution": {
+        "Node": {
+            "target": "savecache.js"
+        }
+    },
+    "messages": {
+        "PackagesDownloadedSuccessfully": "Package were downloaded successfully",
+        "PackagesFailedToDownload": "Packages failed to download",
+        "ConnectingAs": "Connecting to feeds in your Azure Pipelines/TFS project collection as '%s' [%s]",
+        "BuildIdentityPermissionsHint": "For internal feeds, make sure the build service identity '%s' [%s] has access to the feed.",
+        "CouldNotFindUniversalPackagesService": "Could not find the Universal Packages service. This task will not be able to authenticate to feeds hosted in your Azure Pipelines/TFS project collection.",
+        "Error_NoValueFoundForEnvVar": "No value was found for the provided environment variable.",
+        "PackagesPublishedSuccessfully": "Packages were published successfully",
+        "PackagesFailedToPublish": "Packages failed to publish",
+        "UnknownFeedType": "Unknown feed type '%s'",
+        "Error_NoSourceSpecifiedForPublish": "No external source was specified for publish",
+        "Error_NoSourceSpecifiedForDownload": "No external source was specified for download",
+        "Error_UnexpectedErrorArtifactTool": "An unexpected error occurred while trying to push the package. Exit code(%s) and error(%s)",
+        "Error_UnexpectedErrorArtifactToolDownload": "An unexpected error occurred while trying to download the package. Exit code(%s) and error(%s)",
+        "Info_DownloadDirectoryNotFound": "Download directory not found or it did not matched the search pattern.",
+        "Info_PublishDirectoryNotFound": "Publish directory not found or it did not matched the search pattern.",
+        "Error_CommandNotRecognized": "The command %s was not recognized.",
+        "Error_NoVersionWasFoundWhichMatches": "No version was found which matches the input %s",
+        "Error_AuthNotSupported": "Authentication using username/password not supported for Universal Packages. Please use personal access tokens.",
+        "Info_DownloadingArtifactTool": "Downloading artifact tool from %s",
+        "Info_Downloading": "Downloading package: %s, version: %s using feed id: %s",
+        "Info_Publishing": "Publishing package: %s, version: %s using feed id: %s",
+        "Info_UsingArtifactToolPublish": "Using artifact tool to publish the package",
+        "Info_UsingArtifactToolDownload": "Using artifact tool to download the package",
+        "Info_ResolvedToolFromCache": "Resolved from tool cache: %s",
+        "Info_UsingToolPath": "Using tool path: %s",
+        "Info_UsingVersion": "Using version: %s",
+        "FailedToGetPackageMetadata": "Failed to get package metadata.",
+        "FailedToGetArtifactTool": "Failed to get artifact tool from service. %s",
+        "Error_UnexpectedErrorFailedToGetToolMetadata": "Failed to get artifact tool metadata from source url %s",
+        "FailedToGetLatestPackageVersion": "Failed to get package versions",
+        "Warn_CredentialsNotFound": "Could not determine credentials to use for Universal Packages",
+        "Error_UniversalPackagesNotSupportedOnPrem": "Universal Packages are not supported in Azure DevOps Server."
+    }
+}

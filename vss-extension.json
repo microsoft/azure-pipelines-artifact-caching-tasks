@@ -1,0 +1,59 @@
+{
+    "manifestVersion": 1,
+    "id": "RestoreCacheUtilities",
+    "name": "Restores and saves caches with Universal Packages",
+    "version": "1.0.0",
+    "publisher": "EthanDennis-Microsoft",
+    "targets": [
+        {
+            "id": "Microsoft.VisualStudio.Services"
+        }
+    ],    
+    "description": "Restores and saves artifacts from a cache given a key.",
+    "categories": [
+        "Azure Pipelines"
+    ],
+    "files": [
+        {
+            "path": "_build/Tasks/RestoreAndSaveCacheV1"
+        },
+        {
+            "path": "_build/Tasks/RestoreCacheV1"
+        },
+        {
+            "path": "_build/Tasks/SaveCacheV1"
+        }
+    ],
+    "contributions": [
+        {
+            "id": "RestoreAndSaveCacheV1",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "_build/Tasks/RestoreAndSaveCacheV1"
+            }
+        },
+        {
+            "id": "RestoreCacheV1",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "_build/Tasks/RestoreCacheV1"
+            }
+        },
+        {
+            "id": "SaveCacheV1",
+            "type": "ms.vss-distributed-task.task",
+            "targets": [
+                "ms.vss-distributed-task.tasks"
+            ],
+            "properties": {
+                "name": "_build/Tasks/SaveCacheV1"
+            }
+        }
+    ]
+}

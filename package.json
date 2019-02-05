@@ -1,0 +1,42 @@
+{
+  "name": "artifact-caching",
+  "version": "1.0.0",
+  "description": "Tasks for caching Azure Pipelines artifacts",
+  "main": "gulpfile.js",
+  "scripts": {
+    "build": "node make.js build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks"
+  },
+  "keywords": [
+    "Azure",
+    "Pipelines",
+    "build",
+    "tasks"
+  ],
+  "author": "Microsoft Corporation",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks/issues"
+  },
+  "homepage": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks",
+  "devDependencies": {
+    "gulp": "3.9.0",
+    "gulp-util": "3.0.4",
+    "markdown-toc": "^1.2.0",
+    "minimatch": "3.0.2",
+    "minimist": "1.1.1",
+    "mocha": "2.3.3",
+    "mocha-junit-reporter": "1.17.0",
+    "node-uuid": "1.4.6",
+    "q": "1.4.1",
+    "semver": "4.3.3",
+    "shelljs": "^0.3.0",
+    "sync-request": "3.0.1",
+    "typed-rest-client": "1.0.9",
+    "typescript": "2.3.4",
+    "validator": "3.33.0"
+  }
+}

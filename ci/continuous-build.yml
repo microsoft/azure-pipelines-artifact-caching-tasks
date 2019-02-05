@@ -1,0 +1,49 @@
+resources:
+- repo: self
+
+name: $(Version)$(Rev:.r)
+
+trigger:
+  batch: true
+  branches:
+    include:
+      - 'master'
+
+pr: none
+    
+jobs:
+- job: Extension
+  pool:
+    vmImage: macOS 10.13
+    demands:
+    - npm
+    - node.js
+
+  steps:
+  - task: NodeTool@0
+    inputs:
+      versionSpec: "8.12.0"
+
+  - task: Npm@1
+    displayName: 'npm install'
+    inputs:
+      verbose: false
+
+  - task: Gulp@0
+    displayName: 'gulp build'
+
+  - task: ms-devlabs.vsts-developer-tools-build-tasks.publish-extension-build-task.PublishExtension@1
+    displayName: 'Publish Extension'
+    inputs:
+      connectedServiceName: 'Ethan Marketplace'
+      extensionVersion: '$(Build.BuildNumber)'
+      updateTasksVersion: false
+
+  - task: CopyFiles@2
+    displayName: 'Copy Files to staging'
+    inputs:
+      Contents: '**/*.vsix'
+      TargetFolder: '$(Build.ArtifactStagingDirectory)'
+
+  - task: PublishBuildArtifacts@1
+    displayName: 'Publish build artifacts'

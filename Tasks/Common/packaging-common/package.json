@@ -1,0 +1,28 @@
+{
+  "name": "packaging-common",
+  "version": "1.0.1",
+  "description": "Azure Pipelines Packaging Tasks Common",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Microsoft Corporation",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@types/ltx": "^2.8.0",
+    "@types/node": "^10.12.9",
+    "adm-zip": "^0.4.11",
+    "azure-devops-node-api": "^6.6.0",
+    "ini": "^1.3.4",
+    "ip-address": "^5.8.9",
+    "ltx": "^2.6.2",
+    "shelljs": "^0.8.3",
+    "q": "^1.5.0",
+    "typed-rest-client": "0.12.0",
+    "vsts-task-lib": "2.6.0",
+    "vsts-task-tool-lib": "0.4.1"
+  }
+}
