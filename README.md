@@ -88,7 +88,7 @@ npm -v
 5.6.0
 ```
 
-Note: On windows if it's still returning npm 2.x run `where npm`. Notice hits in program files. Rename those two npm files and the 5.6.0 in AppData will win.
+Note: On Windows, if it's still returning npm 2.x, run `where npm`. Notice hits in program files. Rename those two npm files and the 5.6.0 in AppData will win.
 
 ### Install Dependencies
 
