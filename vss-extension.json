@@ -1,7 +1,7 @@
 {
     "manifestVersion": 1,
-    "id": "RestoreCacheUtilities",
-    "name": "Restores and saves caches with Universal Packages",
+    "id": "PipelineArtifactCaching",
+    "name": "Restores and saves pipeline artifacts with Universal Packages",
     "version": "1.0.0",
     "publisher": "EthanDennis-Microsoft",
     "targets": [
@@ -9,7 +9,7 @@
             "id": "Microsoft.VisualStudio.Services"
         }
     ],    
-    "description": "Restores and saves artifacts from a cache given a key.",
+    "description": "Restores and saves pipeline artifacts from a cache given a key.",
     "categories": [
         "Azure Pipelines"
     ],
