@@ -1,5 +1,5 @@
 # Azure Pipelines Artifact Caching Tasks
-[![Build Status](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_apis/build/status/Microsoft.azure-pipelines-artifact-caching-tasks?branchName=master)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_build/latest?definitionId=17&branchName=master)
+[![Build Status](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_apis/build/status/Microsoft.azure-pipelines-artifact-caching-tasks?branchName=master)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_build/latest?definitionId=17&branchName=master) [![Release status](https://vsrm.dev.azure.com/1es-cat/_apis/public/Release/badge/73af267c-80da-42c5-b634-ef63bb6d61fc/1/1)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_release?definitionId=1)
 
 This repo contains the tasks that enable the caching of intermediate artifacts from an Azure Pipelines build using Universal Artifacts.
 
