@@ -1,15 +1,15 @@
 {
-  "id": "50759521-9c5f-4f40-9ae7-8f9876ba9439",
+  "id": "50759521-9c5e-4f40-9ae7-8f9876ba9439",
   "name": "RestoreAndSaveCache",
   "friendlyName": "ms-resource:loc.friendlyName",
   "description": "ms-resource:loc.description",
   "helpMarkDown": "ms-resource:loc.helpMarkDown",
   "category": "Utility",
-  "author": "Ethan Dennis",
+  "author": "Microsoft Corp",
   "version": {
     "Major": 1,
-    "Minor": 5,
-    "Patch": 13
+    "Minor": 0,
+    "Patch": 1
   },
   "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
   "inputs": [
