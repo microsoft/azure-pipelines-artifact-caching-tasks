@@ -9,7 +9,11 @@ trigger:
     include:
       - 'master'
 
-pr: none
+pr:
+  autoCancel: true
+  branches:
+    include:
+      - 'master'
     
 jobs:
 - job: Extension
@@ -32,10 +36,9 @@ jobs:
   - task: Gulp@0
     displayName: 'gulp build'
 
-  - task: ms-devlabs.vsts-developer-tools-build-tasks.publish-extension-build-task.PublishExtension@1
-    displayName: 'Publish Extension'
+  - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+    displayName: 'Package Extension'
     inputs:
-      connectedServiceName: 'Ethan Marketplace'
       extensionVersion: '$(Build.BuildNumber)'
       updateTasksVersion: false
 
