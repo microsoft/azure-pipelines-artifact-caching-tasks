@@ -8,7 +8,7 @@
         {
             "id": "Microsoft.VisualStudio.Services"
         }
-    ],    
+    ],
     "description": "Restores and saves pipeline artifacts from a cache given a key.",
     "categories": [
         "Azure Pipelines"
@@ -24,6 +24,9 @@
             "path": "_build/Tasks/SaveCacheV1"
         }
     ],
+    "icons": {
+        "default": "images/icon.png"
+    },
     "contributions": [
         {
             "id": "RestoreAndSaveCacheV1",
@@ -54,6 +57,41 @@
             "properties": {
                 "name": "_build/Tasks/SaveCacheV1"
             }
+        }
+    ],
+    "content": {
+        "details": {
+            "path": "README.md"
+        },
+        "license": {
+            "path": "LICENSE"
+        }
+    },
+    "links": {
+        "repository": {
+            "uri": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks"
+        },
+        "issues": {
+            "uri": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks/issues"
+        },
+        "support": {
+            "uri": "mailto:1es-lighthouse-eng@microsoft.com"
+        }
+    },
+    "repository": {
+        "type": "git",
+        "uri": "https://github.com/Microsoft/azure-pipelines-artifact-caching-tasks"
+    },
+    "badges": [
+        {
+            "href": "https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_build/latest?definitionId=17&branchName=master",
+            "uri": "https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_apis/build/status/Microsoft.azure-pipelines-artifact-caching-tasks?branchName=master",
+            "description": "Build"
+        },
+        {
+            "href": "https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_release?definitionId=1",
+            "uri": "https://vsrm.dev.azure.com/1es-cat/_apis/public/Release/badge/73af267c-80da-42c5-b634-ef63bb6d61fc/1/1",
+            "description": "Release"
         }
     ]
 }
