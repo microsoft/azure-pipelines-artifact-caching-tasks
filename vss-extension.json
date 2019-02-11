@@ -3,7 +3,7 @@
     "id": "PipelineArtifactCaching",
     "name": "Restores and saves pipeline artifacts with Universal Packages",
     "version": "1.0.0",
-    "publisher": "EthanDennis-Microsoft",
+    "publisher": "1eslighthouseeng",
     "targets": [
         {
             "id": "Microsoft.VisualStudio.Services"

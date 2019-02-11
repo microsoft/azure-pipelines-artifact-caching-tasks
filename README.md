@@ -1,4 +1,5 @@
 # Azure Pipelines Artifact Caching Tasks
+
 [![Build Status](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_apis/build/status/Microsoft.azure-pipelines-artifact-caching-tasks?branchName=master)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_build/latest?definitionId=17&branchName=master) [![Release status](https://vsrm.dev.azure.com/1es-cat/_apis/public/Release/badge/73af267c-80da-42c5-b634-ef63bb6d61fc/1/1)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_release?definitionId=1)
 
 This repo contains the tasks that enable the caching of intermediate artifacts from an Azure Pipelines build using Universal Artifacts.
@@ -8,7 +9,7 @@ This repo contains the tasks that enable the caching of intermediate artifacts f
 This build task is meant to add an easy way to provide caching of intermediate build artifacts. To demonstrate, let's examine the following build definition snippet:
 
 ```yaml
-- task: EthanDennis-Microsoft.RestoreCacheUtilities.RestoreCacheV1.RestoreCache@1
+- task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreCacheV1.RestoreCache@1
   inputs:
     keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
@@ -18,7 +19,7 @@ This build task is meant to add an easy way to provide caching of intermediate b
     yarn install
   displayName: Install Dependencies
 
-- task: EthanDennis-Microsoft.RestoreCacheUtilities.SaveCacheV1.SaveCache@1
+- task: 1ESLighthouseEng.PipelineArtifactCaching.SaveCacheV1.SaveCache@1
   inputs:
     keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
@@ -35,7 +36,7 @@ Inputs:
 If you do not want to add two build steps to your build definition, you can also use a single task that implicitly adds the `SaveCache` task at the end of the build. For example:
 
 ```yaml
-- task: EthanDennis-Microsoft.RestoreCacheUtilities.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+- task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
   inputs:
     keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
@@ -51,8 +52,9 @@ If you do not want to add two build steps to your build definition, you can also
 If a cache was restored successfully, the build variable `CacheRestored` is set to `true`. This can provide a further perfomance boost by optionally skipping package install commands entirely.
 
 In the following example, the 'yarn' task will only run if there was not a cache hit. Although this can provide faster builds, it may not be suitable for production builds.
+
 ```yaml
-- task: EthanDennis-Microsoft.RestoreCacheUtilities.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+- task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
   inputs:
     keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
     targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
