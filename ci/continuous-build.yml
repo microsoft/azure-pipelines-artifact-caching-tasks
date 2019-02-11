@@ -40,6 +40,7 @@ jobs:
     displayName: 'Package Extension'
     inputs:
       extensionVersion: '$(Build.BuildNumber)'
+      extensionVisibility: public
       updateTasksVersion: false
 
   - task: CopyFiles@2
