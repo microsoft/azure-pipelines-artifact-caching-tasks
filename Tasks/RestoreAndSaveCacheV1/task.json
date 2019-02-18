@@ -1,5 +1,5 @@
 {
-    "id": "50759521-9c5e-4f40-9ae7-8f9876ba9439",
+    "id": "50759521-9c5e-4f70-9ae7-8f9876ba9439",
     "name": "RestoreAndSaveCache",
     "friendlyName": "Restore and save cache",
     "description": "Restores and saves a folder given a specified key.",
@@ -9,7 +9,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 5
+        "Patch": 6
     },
     "instanceNameFormat": "Restore and save artifact based on: $(keyfile)",
     "inputs": [
