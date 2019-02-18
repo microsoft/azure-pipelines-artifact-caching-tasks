@@ -1,5 +1,5 @@
 {
-    "id": "2414c51d-d93a-4815-9d4c-3b9f19b11cb0",
+    "id": "2474c51d-d93a-4815-9d4c-3b9f19b11cb0",
     "name": "SaveCache",
     "friendlyName": "Save cache",
     "description": "Saves a cache with Universal Artifacts given a specified key.",
@@ -9,7 +9,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 6
+        "Patch": 5
     },
     "instanceNameFormat": "Save artifact based on: $(keyfile)",
     "inputs": [

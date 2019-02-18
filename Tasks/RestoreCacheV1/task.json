@@ -1,5 +1,5 @@
 {
-    "id": "9aea8069-034d-4094-a6ad-880767d0686c",
+    "id": "9aea8869-034d-4094-a6ad-880767d0686c",
     "name": "RestoreCache",
     "friendlyName": "Restore cache",
     "description": "Restore a folder from a cache given a specified key.",
@@ -9,7 +9,7 @@
     "version": {
         "Major": 1,
         "Minor": 0,
-        "Patch": 6
+        "Patch": 5
     },
     "instanceNameFormat": "Restore artifact based on: $(keyfile)",
     "inputs": [
