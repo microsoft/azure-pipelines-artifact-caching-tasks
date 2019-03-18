@@ -85,7 +85,7 @@ export async function run(
     // if (!err.message.includes("Can't find the package")) {
     //   tl.error(err);
     // }
-    console.log(error);
+    console.log(err);
     return false;
   }
 }
