@@ -82,9 +82,9 @@ export async function run(
     console.log("artifact downloaded");
     return true;
   } catch (err) {
-    // if (!err.message.includes("Can't find the package")) {
-    //   tl.error(err);
-    // }
+    if (!err.message.includes("Can't find the package")) {
+      tl.error(err);
+    }
     console.log(err);
     return false;
   }
@@ -134,7 +134,7 @@ function downloadPackageUsingArtifactTool(
   }
 
   // TODO: Check if permissions exist
-  console.log(
+  tl.error(
     tl.loc(
       "Error_UnexpectedErrorArtifactToolDownload",
       execResult.code,

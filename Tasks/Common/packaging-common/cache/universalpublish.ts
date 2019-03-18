@@ -168,7 +168,7 @@ function publishPackageUsingArtifactTool(
   }
 
   // TODO: Check if permissions exist
-  console.log(
+  tl.error(
     tl.loc(
       "Error_UnexpectedErrorArtifactTool",
       execResult.code,
