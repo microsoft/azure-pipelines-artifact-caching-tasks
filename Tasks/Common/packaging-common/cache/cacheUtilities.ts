@@ -5,7 +5,7 @@ import crypto = require('crypto');
 import fs = require('fs');
 import path = require('path');
 import shell = require('shelljs');
-import tl = require('vsts-task-lib/task');
+import tl = require('azure-pipelines-task-lib/task');
 
 import { UniversalPackages } from './universalPackages';
 const universalPackages = new UniversalPackages();
@@ -148,7 +148,7 @@ export class cacheUtilities {
       let isFork = tl.getVariable('System.PullRequest.IsFork') || 'undefined';
 
       if (isFork.toLowerCase() == 'true') {
-        console.log('Caches are not restored for forked repositories');
+        tl.setResult(tl.TaskResult.Skipped, 'Caches are not restored for forked repositories.');
         return;
       }
 
@@ -185,7 +185,7 @@ export class cacheUtilities {
       let isFork = tl.getVariable('System.PullRequest.IsFork') || 'undefined';
 
       if (isFork.toLowerCase() == 'true') {
-        console.log('Caches are not saved from forked repositories');
+        tl.setResult(tl.TaskResult.Skipped, 'Caches are not saved from forked repositories.');
         return;
       }
 

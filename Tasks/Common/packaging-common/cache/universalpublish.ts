@@ -3,8 +3,8 @@
 
 import * as pkgLocationUtils from "../locationUtilities";
 import { ProvenanceHelper } from "../provenance";
-import * as tl from "vsts-task-lib";
-import { IExecOptions, IExecSyncResult } from "vsts-task-lib/toolrunner";
+import * as tl from "azure-pipelines-task-lib";
+import { IExecOptions, IExecSyncResult } from "azure-pipelines-task-lib/toolrunner";
 import * as artifactToolRunner from "./ArtifactToolRunner";
 import * as artifactToolUtilities from "./ArtifactToolUtilities";
 import * as auth from "./Authentication";

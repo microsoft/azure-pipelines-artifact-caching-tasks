@@ -3,7 +3,7 @@
 
 import * as path from "path";
 import * as pkgLocationUtils from "../locationUtilities";
-import * as tl from "vsts-task-lib";
+import * as tl from "azure-pipelines-task-lib";
 import * as artifactToolUtilities from "./ArtifactToolUtilities";
 import * as universalDownload from "./universaldownload";
 import * as universalPublish from "./universalpublish";

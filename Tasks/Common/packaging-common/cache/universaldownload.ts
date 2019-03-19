@@ -1,9 +1,9 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as tl from "vsts-task-lib";
+import * as tl from "azure-pipelines-task-lib";
 import * as pkgLocationUtils from "../locationUtilities";
-import { IExecSyncResult, IExecOptions } from "vsts-task-lib/toolrunner";
+import { IExecSyncResult, IExecOptions } from "azure-pipelines-task-lib/toolrunner";
 import * as artifactToolRunner from "./ArtifactToolRunner";
 import * as artifactToolUtilities from "./ArtifactToolUtilities";
 import * as auth from "./Authentication";
