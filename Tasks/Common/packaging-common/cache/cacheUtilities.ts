@@ -145,6 +145,13 @@ export class cacheUtilities {
         }
       }
 
+      let isFork = tl.getVariable('System.PullRequest.IsFork') || 'undefined';
+
+      if (isFork.toLowerCase() == 'true') {
+        console.log('Caches are not restored for forked repositories');
+        return;
+      }
+
       const patterns = tl.getInput('keyFile', true).split(/,[ ]*/g);
 
       const findOptions = <tl.FindOptions>{
@@ -179,6 +186,7 @@ export class cacheUtilities {
 
       if (isFork.toLowerCase() == 'true') {
         console.log('Caches are not saved from forked repositories');
+        return;
       }
 
       const patterns = tl.getInput('keyfile', true).split(/,[ ]*/g);
