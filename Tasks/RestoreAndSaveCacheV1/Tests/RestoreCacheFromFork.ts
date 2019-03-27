@@ -8,16 +8,6 @@ let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolders", "**/*/node_modules");
 
-// provide answers for task mock
-var a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
-  findMatch: {
-    "**/*/yarn.lock": []
-  },
-  rmRF: {
-    "*": { success: true }
-  }
-};
-
-tmr.setAnswers(a);
+process.env["SYSTEM_PULLREQUEST_ISFORK"] = "true";
 
 tmr.run();
