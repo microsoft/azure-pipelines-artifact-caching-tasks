@@ -1,6 +1,12 @@
 {
-    "compilerOptions": {
-        "target": "ES6",
-        "module": "commonjs"
-    }
+  "compilerOptions": {
+    "target": "ES6",
+    "module": "commonjs",
+    "sourceMap": true,
+    "plugins": [
+      {
+        "name": "typescript-tslint-plugin"
+      }
+    ]
+  }
 }

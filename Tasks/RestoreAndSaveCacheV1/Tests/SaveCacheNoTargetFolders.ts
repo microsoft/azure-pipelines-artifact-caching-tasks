@@ -12,7 +12,7 @@ process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
 // provide answers for task mock
 var a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
   findMatch: {
-    "**/*/yarn.lock": ["src/webapi", "src/application"],
+    "**/*/yarn.lock": ["src/webapi/yarn.lock", "src/application/yarn.lock"],
     "**/*/node_modules": []
   },
   find: {

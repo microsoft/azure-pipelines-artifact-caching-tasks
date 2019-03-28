@@ -14,30 +14,30 @@ const isWin = process.platform === "win32";
 const salt = 2;
 
 export class cacheUtilities {
-  hashFiles = function(files: string[]): string {
+  public hashFiles = function(files: string[]): string {
     let contents: string = "";
     files = files.sort();
 
     files.forEach(file => {
-      let filePath = path.resolve(file);
+      const filePath = tl.resolve(file);
       contents += fs.readFileSync(filePath, "utf8");
     });
 
     contents = contents.replace(/(\r|\n)/gm, "");
     contents += salt.toString();
 
-    let hash = `${process.platform}-${crypto
+    const hash = `${process.platform}-${crypto
       .createHash("sha256")
       .update(contents)
       .digest("hex")}`;
     return hash;
   };
 
-  downloadCaches = async function(files: string[], destinationFolder: string) {
+  public downloadCaches = async function(files: string[], destinationFolder: string) {
     const hash: string = await this.hashFiles(files);
 
     // Make our working folder
-    let tmp_cache = path.join(
+    const tmp_cache = path.join(
       tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
       "tmp_cache"
     );
@@ -52,7 +52,7 @@ export class cacheUtilities {
     }
 
     try {
-      let result = await universalPackages.download(hash, tmp_cache);
+      const result = await universalPackages.download(hash, tmp_cache);
 
       // Check if blob exists
       if (result) {
@@ -78,8 +78,8 @@ export class cacheUtilities {
     tl.rmRF(tmp_cache);
   };
 
-  uploadCaches = async function(keyFiles: string[], targetFolders: string[]) {
-    if (targetFolders.length == 0) {
+  public uploadCaches = async function(keyFiles: string[], targetFolders: string[]) {
+    if (targetFolders.length === 0) {
       console.log("Issue: no artifacts specified to cache");
       return;
     }
@@ -87,7 +87,7 @@ export class cacheUtilities {
     const hash: string = await this.hashFiles(keyFiles);
 
     // If we downloaded from a cached archive, no need to regenerate archive
-    let status = tl.getVariable(hash);
+    const status = tl.getVariable(hash);
     if (status === "true") {
       console.log("Cache entry already exists for: ", hash);
       return;
@@ -101,7 +101,7 @@ export class cacheUtilities {
     console.log("Creating cache entry for: ", hash);
 
     // Make our working folder
-    let tmp_cache = path.join(
+    const tmp_cache = path.join(
       tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
       "tmp_cache"
     );
@@ -112,7 +112,7 @@ export class cacheUtilities {
     let tarballPath = path.join(tmp_cache, hash + ".tar.gz");
 
     // ensure exists
-    if (!fs.existsSync(tmp_cache)) {
+    if (!tl.exist(tmp_cache)) {
       console.log("Artifact directory does not exist: ", tmp_cache);
       return;
     }
@@ -125,7 +125,7 @@ export class cacheUtilities {
     }
 
     try {
-      let { stderr: error } = shell.exec(
+      const { stderr: error } = shell.exec(
         `tar -C "${tarballParentDir}" -czf "${tarballPath}" ${targetFolders
           .map(t => `\"${t}\"`)
           .join(" ")}`,
@@ -148,14 +148,14 @@ export class cacheUtilities {
     tl.rmRF(tmp_cache);
   };
 
-  restoreCache = async function() {
+  public restoreCache = async function() {
     try {
       let buildStatus = tl.getVariable("Agent.JobStatus");
       if (buildStatus) {
         buildStatus = buildStatus.toLowerCase();
         if (
-          buildStatus != "succeeded" &&
-          buildStatus != "succeededwithissues"
+          buildStatus !== "succeeded" &&
+          buildStatus !== "succeededwithissues"
         ) {
           tl.debug(
             "Bailing out from building artifacts due to previously unsuccessful task"
@@ -164,9 +164,9 @@ export class cacheUtilities {
         }
       }
 
-      let isFork = tl.getVariable("System.PullRequest.IsFork") || "undefined";
+      const isFork = tl.getVariable("System.PullRequest.IsFork") || "undefined";
 
-      if (isFork.toLowerCase() == "true") {
+      if (isFork.toLowerCase() === "true") {
         tl.setResult(
           tl.TaskResult.Skipped,
           "Caches are not restored for forked repositories."
@@ -176,13 +176,13 @@ export class cacheUtilities {
 
       const patterns = tl.getInput("keyFile", true).split(/,[ ]*/g);
 
-      const findOptions = <tl.FindOptions>{
+      const findOptions = {
         allowBrokenSymbolicLinks: false,
         followSpecifiedSymbolicLink: false,
-        followSymbolicLinks: false
-      };
+        followSymbolicLinks: false,
+      } as tl.FindOptions;
 
-      let files: string[] = tl.findMatch(
+      const files: string[] = tl.findMatch(
         tl.getVariable("System.DefaultWorkingDirectory"),
         patterns,
         findOptions
@@ -191,7 +191,7 @@ export class cacheUtilities {
         tl.debug(`Found key file: ${f}`);
       });
 
-      if (files.length == 0) {
+      if (files.length === 0) {
         tl.warning(`no key files matching: ${patterns}`);
         return;
       }
@@ -206,15 +206,15 @@ export class cacheUtilities {
     }
   };
 
-  saveCache = async function() {
+  public saveCache = async function() {
     try {
       let buildStatus = tl.getVariable("Agent.JobStatus");
 
       if (buildStatus) {
         buildStatus = buildStatus.toLowerCase();
         if (
-          buildStatus != "succeeded" &&
-          buildStatus != "succeededwithissues"
+          buildStatus !== "succeeded" &&
+          buildStatus !== "succeededwithissues"
         ) {
           console.log(
             "Bailing out from building artifacts due to previously unsuccessful task"
@@ -223,9 +223,9 @@ export class cacheUtilities {
         }
       }
 
-      let isFork = tl.getVariable("System.PullRequest.IsFork") || "undefined";
+      const isFork = tl.getVariable("System.PullRequest.IsFork") || "undefined";
 
-      if (isFork.toLowerCase() == "true") {
+      if (isFork.toLowerCase() === "true") {
         tl.setResult(
           tl.TaskResult.Skipped,
           "Caches are not saved from forked repositories."
@@ -236,13 +236,13 @@ export class cacheUtilities {
       const patterns = tl.getInput("keyfile", true).split(/,[ ]*/g);
       const targetPatterns = tl.getInput("targetfolder", true).split(/,[ ]*/g);
 
-      const findOptions = <tl.FindOptions>{
+      const findOptions = {
         allowBrokenSymbolicLinks: false,
         followSpecifiedSymbolicLink: false,
-        followSymbolicLinks: false
-      };
+        followSymbolicLinks: false,
+      } as tl.FindOptions;
 
-      let keyFiles: string[] = tl.findMatch(
+      const keyFiles: string[] = tl.findMatch(
         tl.getVariable("System.DefaultWorkingDirectory"),
         patterns,
         findOptions
@@ -251,21 +251,21 @@ export class cacheUtilities {
         tl.debug(`Found key file: ${f}`);
       });
 
-      if (keyFiles.length == 0) {
+      if (keyFiles.length === 0) {
         tl.warning(`no key files matching: ${patterns}`);
         return;
       }
 
       // Construct this list of artifacts to store. These are relative to prevent the full path from
-      let searchDirectory =
+      const searchDirectory =
         tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
-      let allPaths = tl.find(searchDirectory);
-      let matchedPaths: string[] = tl.match(allPaths, targetPatterns);
-      let targetFolders: string[] = matchedPaths
+      const allPaths = tl.find(searchDirectory);
+      const matchedPaths: string[] = tl.match(allPaths, targetPatterns);
+      const targetFolders: string[] = matchedPaths
         .filter((itemPath: string) => tl.stats(itemPath).isDirectory())
         .map(folder => path.relative(searchDirectory, folder));
 
-      if (targetFolders.length == 0) {
+      if (targetFolders.length === 0) {
         tl.warning(`no target folders matching: ${targetPatterns}`);
         return;
       }
