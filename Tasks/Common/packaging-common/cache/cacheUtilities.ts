@@ -52,10 +52,11 @@ export class cacheUtilities {
     }
 
     try {
-      const result = await universalPackages.download(hash, tmp_cache);
+      const result  = await universalPackages.download(hash, tmp_cache);
 
       // Check if blob exists
       if (result) {
+        console.log(`tar -xzf ${tarballPath} -C "${destinationFolder}"`);
         try {
           shell.exec(`tar -xzf ${tarballPath} -C "${destinationFolder}"`);
 

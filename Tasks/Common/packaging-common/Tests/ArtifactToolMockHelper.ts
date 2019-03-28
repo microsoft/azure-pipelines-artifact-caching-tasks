@@ -1,14 +1,13 @@
 import tmrm = require("azure-pipelines-task-lib/mock-run");
+import { TaskLibAnswerExecResult} from "azure-pipelines-task-lib/mock-answer";
 
 export function registerArtifactToolUtilitiesMock(
   tmr: tmrm.TaskMockRunner,
   toolPath: string
 ) {
   const artifactToolMocks = {
-    getArtifactToolFromService(serviceUri, accessToken, toolName): Promise<string> {
-      console.log("getting mock artifact tool from service");
-
-      return Promise.resolve(toolPath);
+    getArtifactToolFromService(serviceUri, accessToken, toolName) {
+      return toolPath;
     },
     getPackageNameFromId(
       serviceUri: string,
@@ -16,19 +15,17 @@ export function registerArtifactToolUtilitiesMock(
       feedId: string,
       packageId: string
     ) {
-      console.log("getting mock artifact package name");
       return packageId;
     },
   };
-  tmr.registerMock("packaging-common/cache/ArtifactToolUtilities", artifactToolMocks);
-  tmr.registerMock("../cache/ArtifactToolUtilities", artifactToolMocks);
+  tmr.registerMock("packaging-common/ArtifactToolUtilities", artifactToolMocks);
+  tmr.registerMock("../ArtifactToolUtilities", artifactToolMocks);
 }
 
 export function registerArtifactToolRunnerMock(tmr: tmrm.TaskMockRunner) {
   const mtt = require("azure-pipelines-task-lib/mock-toolrunner");
   const artifactToolMocks = {
     getOptions() {
-      console.log("getting mock options");
       return {
         cwd: process.cwd(),
         env: Object.assign({}, process.env),
@@ -43,13 +40,12 @@ export function registerArtifactToolRunnerMock(tmr: tmrm.TaskMockRunner) {
       command: string[],
       execOptions
     ) {
-      console.log("running mock artifact tool");
       const tr = new mtt.ToolRunner(artifactToolPath);
       tr.arg(command);
       return tr.execSync(execOptions);
     },
   };
 
-  tmr.registerMock("../cache/ArtifactToolRunner", artifactToolMocks);
-  tmr.registerMock("packaging-common/cache/ArtifactToolRunner", artifactToolMocks);
+  tmr.registerMock("packaging-common/ArtifactToolRunner", artifactToolMocks);
+  tmr.registerMock("../ArtifactToolRunner", artifactToolMocks);
 }

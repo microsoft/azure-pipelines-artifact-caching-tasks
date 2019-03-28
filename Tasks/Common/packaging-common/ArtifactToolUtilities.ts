@@ -6,7 +6,7 @@ import AdmZip = require('adm-zip');
 import os = require("os");
 import * as path from "path";
 import * as semver from "semver";
-import * as pkgLocationUtils from "../locationUtilities";
+import * as pkgLocationUtils from "./locationUtilities";
 import * as tl from "azure-pipelines-task-lib";
 import * as toollib from "azure-pipelines-tool-lib/tool";
 

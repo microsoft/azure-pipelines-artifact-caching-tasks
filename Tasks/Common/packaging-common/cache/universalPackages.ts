@@ -3,7 +3,7 @@
 
 import * as tl from "azure-pipelines-task-lib";
 import * as pkgLocationUtils from "../locationUtilities";
-import * as artifactToolUtilities from "./ArtifactToolUtilities";
+import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as universalDownload from "./universaldownload";
 import * as universalPublish from "./universalpublish";
 

@@ -9,23 +9,18 @@ import * as artMock from "./ArtifactToolMockHelper";
 export class UniversalMockHelper {
   private static ArtifactToolCmd: string = "/users/tmp/ArtifactTool.exe";
 
-  public answers: TaskLibAnswers = {
-    checkPath: {},
-    exec: {},
-    exist: {},
-    findMatch: {},
-    rmRF: {},
-    which: {
-      "/users/tmp/ArtifactTool.exe": UniversalMockHelper.ArtifactToolCmd,
-    },
-  };
-
-  constructor(private tmr: tmrm.TaskMockRunner) {
+  constructor(
+    private tmr: tmrm.TaskMockRunner,
+    private answers: TaskLibAnswers
+  ) {
     this.tmr.setInput("verbosity", "verbose");
+    this.tmr.setInput('feedlist', 'node-package-feed');
 
     process.env.AGENT_HOMEDIRECTORY = "/users/home/directory";
     (process.env.BUILD_SOURCESDIRECTORY = "/users/home/sources"),
-      (process.env.ENDPOINT_AUTH_SYSTEMVSSCONNECTION =
+    process.env.SYSTEM_SERVERTYPE = "hosted";
+    process.env.BUILD_DEFINITIONNAME = "build definition 1";
+    (process.env.ENDPOINT_AUTH_SYSTEMVSSCONNECTION =
         '{"parameters":{"AccessToken":"token"},"scheme":"OAuth"}');
     process.env.ENDPOINT_URL_SYSTEMVSSCONNECTION =
       "https://example.visualstudio.com/defaultcollection";
@@ -40,7 +35,7 @@ export class UniversalMockHelper {
       tmr,
       UniversalMockHelper.ArtifactToolCmd
     );
-    artMock.registerArtifactToolRunnerMock(tmr);
+    artMock.registerArtifactToolRunnerMock(this.tmr);
     pkgMock.registerLocationHelpersMock(tmr);
   }
 
@@ -56,6 +51,11 @@ export class UniversalMockHelper {
     if (!service) {
       service = "https://example.visualstudio.com/defaultcollection";
     }
+
+    console.log(`${
+      UniversalMockHelper.ArtifactToolCmd
+    } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`);
+
     this.answers.exec[
       `${
         UniversalMockHelper.ArtifactToolCmd

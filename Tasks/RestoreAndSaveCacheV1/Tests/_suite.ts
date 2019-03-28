@@ -1,6 +1,7 @@
 import * as path from "path";
 import * as assert from "assert";
 import * as ttm from "azure-pipelines-task-lib/mock-test";
+import { platform } from "os";
 
 before(function() {
   this.timeout(5000);
@@ -65,14 +66,10 @@ describe("RestoreCache tests", function() {
     console.log(tr.succeeded);
     console.log(tr.stdout);
 
-    assert(
-      tr.stdOutContained("getting mock artifact tool from service"),
-      "should have used mock"
-    );
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        "/users/tmp/ArtifactTool.exe universal download --feed TestFeed --service https://example.visualstudio.com/defaultcollection --package-name TestPackage --package-version 1.0.0 --path /Users/test/tmp --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose"
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -82,6 +79,14 @@ describe("RestoreCache tests", function() {
     );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored=true"),
+      "'CacheRestored' variable should be set to true"
+    );
+    assert(
+      tr.stdOutContained(`${process.platform}-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d=true`),
+      "variable should be set to mark key as valid in build"
+    );
     done();
   });
 });

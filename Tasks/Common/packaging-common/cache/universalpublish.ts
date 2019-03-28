@@ -5,28 +5,28 @@ import * as pkgLocationUtils from "../locationUtilities";
 import { ProvenanceHelper } from "../provenance";
 import * as tl from "azure-pipelines-task-lib";
 import { IExecOptions, IExecSyncResult } from "azure-pipelines-task-lib/toolrunner";
-import * as artifactToolRunner from "./ArtifactToolRunner";
-import * as artifactToolUtilities from "./ArtifactToolUtilities";
+import * as artifactToolRunner from "../ArtifactToolRunner";
+import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as auth from "./Authentication";
 
 export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<boolean> {
-    let buildIdentityDisplayName: string = null;
-    let buildIdentityAccount: string = null;
+    const buildIdentityDisplayName: string = null;
+    const buildIdentityAccount: string = null;
     try {
         // Get directory to publish
-        let publishDir: string = targetFolder;
+        const publishDir: string = targetFolder;
         let serviceUri: string;
         let feedId: string;
         let packageName: string;
-        let version: string = `1.0.0-${hash}`;
+        const version: string = `1.0.0-${hash}`;
         let accessToken: string;
         let feedUri: string;
-        let publishedPackageVar: string = tl.getInput("publishedPackageVar");
+        const publishedPackageVar: string = tl.getInput("publishedPackageVar");
         const versionRadio = 'custom';
 
         let internalAuthInfo: auth.InternalAuthInfo;
 
-        let toolRunnerOptions = artifactToolRunner.getOptions();
+        const toolRunnerOptions = artifactToolRunner.getOptions();
 
         let sessionId: string;
 
@@ -35,7 +35,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
 
         packageName = tl.getVariable('Build.DefinitionName')
             .replace(/\s/g, "")
-            .substring(0,255)
+            .substring(0, 255)
             .toLowerCase();
 
         feedId = tl.getInput("feedList");
@@ -103,7 +103,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
 }
 
 function publishPackageUsingArtifactTool(publishDir: string, options: artifactToolRunner.IArtifactToolOptions, execOptions: IExecOptions) {
-    let command = new Array<string>();
+    const command = new Array<string>();
     command.push("universal", "publish",
         "--feed", options.feedId,
         "--service", options.accountUrl,
