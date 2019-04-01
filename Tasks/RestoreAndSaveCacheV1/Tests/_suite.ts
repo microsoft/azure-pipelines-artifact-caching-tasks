@@ -7,12 +7,15 @@ before(function() {
   this.timeout(5000);
 });
 
+const hash = "a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d";
+
 describe("RestoreCache tests", function() {
   before(function() {});
 
   after(() => {});
 
-  it("RestoreCache runs successfully with warnings if no key files are found", function(done: MochaDone) {
+  it("RestoreCache runs successfully with warnings if no key files are found",
+  function(done: MochaDone) {
     const tp = path.join(__dirname, "RestoreCacheNoKeyFiles.js");
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
@@ -69,7 +72,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -84,7 +87,7 @@ describe("RestoreCache tests", function() {
       "'CacheRestored' variable should be set to true"
     );
     assert(
-      tr.stdOutContained(`${process.platform}-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d=true`),
+      tr.stdOutContained(`${process.platform}-${hash}=true`),
       "variable should be set to mark key as valid in build"
     );
     done();
@@ -159,6 +162,38 @@ describe("SaveCache tests", function() {
       tr.stdout.indexOf("Caches are not saved from forked repositories.") >= 0,
       true,
       "should display 'Caches are not saved from forked repositories.'"
+    );
+    done();
+  });
+
+  it("SaveCache doesn't create archive if cache hit", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheCacheHit.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
+    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
+    assert(
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
+    assert(
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored=true"),
+      "'CacheRestored' variable should be set to true"
+    );
+    assert(
+      tr.stdOutContained(`${process.platform}-${hash}=true`),
+      "variable should be set to mark key as valid in build"
     );
     done();
   });

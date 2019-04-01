@@ -1,4 +1,3 @@
-import * as ma from "azure-pipelines-task-lib/mock-answer";
 import * as tmrm from "azure-pipelines-task-lib/mock-run";
 import * as path from "path";
 import * as fs from "fs";
@@ -39,19 +38,6 @@ umh.mockUniversalCommand(
 
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolders", "**/*/node_modules");
-
-// provide answers for task mock
-// const a: ma.TaskLibAnswers = {
-//   findMatch: {
-//     "**/*/yarn.lock": ["src/webapi/yarn.lock", "src/application/yarn.lock"],
-//     "**/*/node_modules": [],
-//   },
-//   rmRF: {
-//     "/users/home/directory/tmp_cache": { success: true },
-//   },
-// } as ma.TaskLibAnswers;
-
-// tmr.setAnswers(a);
 
 // mock a specific module function called in task
 tmr.registerMock("fs", {

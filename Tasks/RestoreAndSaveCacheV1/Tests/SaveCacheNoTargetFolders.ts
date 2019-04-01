@@ -2,29 +2,29 @@ import * as ma from "azure-pipelines-task-lib/mock-answer";
 import * as tmrm from "azure-pipelines-task-lib/mock-run";
 import * as path from "path";
 
-let taskPath = path.join(__dirname, "..", "savecache.js");
-let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
+const taskPath = path.join(__dirname, "..", "savecache.js");
+const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolder", "**/*/node_modules");
 process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
 
 // provide answers for task mock
-var a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
+const a: ma.TaskLibAnswers = {
   findMatch: {
     "**/*/yarn.lock": ["src/webapi/yarn.lock", "src/application/yarn.lock"],
-    "**/*/node_modules": []
+    "**/*/node_modules": [],
   },
   find: {
     DefaultWorkingDirectory: [
       "src/webapi/startup.config",
-      "src/application/program.cs"
-    ]
+      "src/application/program.cs",
+    ],
   },
   rmRF: {
-    "*": { success: true }
-  }
-};
+    "*": { success: true },
+  },
+} as ma.TaskLibAnswers;
 
 tmr.setAnswers(a);
 

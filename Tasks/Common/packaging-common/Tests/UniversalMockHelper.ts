@@ -27,7 +27,6 @@ export class UniversalMockHelper {
     process.env.SYSTEM_DEFAULTWORKINGDIRECTORY = "/users/home/directory";
     process.env.SYSTEM_TEAMFOUNDATIONCOLLECTIONURI =
       "https://example.visualstudio.com/defaultcollection";
-    process.env.SYSTEM_SERVERTYPE = "hosted";
 
     this.tmr.setAnswers(this.answers);
 
@@ -51,10 +50,6 @@ export class UniversalMockHelper {
     if (!service) {
       service = "https://example.visualstudio.com/defaultcollection";
     }
-
-    console.log(`${
-      UniversalMockHelper.ArtifactToolCmd
-    } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`);
 
     this.answers.exec[
       `${

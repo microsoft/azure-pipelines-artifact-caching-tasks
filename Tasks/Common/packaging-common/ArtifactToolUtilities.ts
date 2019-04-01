@@ -38,7 +38,6 @@ export async function extractZip(file: string): Promise<string> {
 }
 
 export async function getArtifactToolFromService(serviceUri: string, accessToken: string, toolName: string) {
-    console.log("getting real artifact tool path");
     const overrideArtifactToolPath = tl.getVariable("UPack.OverrideArtifactToolPath");
     if (overrideArtifactToolPath != null) {
         return getArtifactToolLocation(overrideArtifactToolPath);
