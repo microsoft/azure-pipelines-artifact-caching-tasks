@@ -13,7 +13,7 @@ tmr.setInput("targetFolder", "**/*/node_modules");
 process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
 
 const key = `${process.platform}-${hash}`;
-process.env[key.toUpperCase()] = "true";
+process.env[key.toUpperCase()] = "false";
 
 // provide answers for task mock
 const a: ma.TaskLibAnswers = {
@@ -39,6 +39,9 @@ const a: ma.TaskLibAnswers = {
     "src/application/node_modules": {
         isDirectory() {return true; },
     },
+  },
+  exist: {
+      "DefaultWorkingDirectory/tmp_cache": true,
   },
 } as ma.TaskLibAnswers;
 
@@ -68,6 +71,12 @@ tmr.registerMock("fs", {
     statSync: fs.statSync,
     linkSync: fs.linkSync,
     symlinkSync: fs.symlinkSync,
+});
+
+tmr.registerMock("shelljs", {
+    exec(command: string) {
+      console.log(`Mock executing command: ${command}`);
+    },
 });
 
 tmr.run();

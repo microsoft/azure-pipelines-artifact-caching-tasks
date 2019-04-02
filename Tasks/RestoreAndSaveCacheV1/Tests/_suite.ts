@@ -174,27 +174,51 @@ describe("SaveCache tests", function() {
     console.log(tr.succeeded);
     console.log(tr.stdout);
 
-    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
-      tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
-      ),
-      "it should have run ArtifactTool"
-    );
-    assert(
-      tr.stdOutContained("ArtifactTool.exe output"),
-      "should have ArtifactTool output"
+      tr.stdOutContained("Cache entry already exists for:"),
+      "should have bailed out due to cache already present"
     );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    done();
+  });
+
+  it("SaveCache doesn't create an archive if no matching hash", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheNoHashMatch.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert(
-      tr.stdOutContained("set CacheRestored=true"),
-      "'CacheRestored' variable should be set to true"
+      tr.stdOutContained("Not caching artifact produced during build:"),
+      "should have bailed out due to no matching hash"
     );
+    assert.equal(
+      tr.warningIssues.length > 0,
+      true,
+      "should have warnings from mismatched cache key"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    done();
+  });
+
+  it("SaveCache creates an archive if cache miss", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheCacheMiss.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert(
-      tr.stdOutContained(`${process.platform}-${hash}=true`),
-      "variable should be set to mark key as valid in build"
+      tr.stdOutContained("Cache entry already exists for:"),
+      "should have bailed out due to cache already present"
     );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
     done();
   });
 });

@@ -89,13 +89,14 @@ export class cacheUtilities {
 
     // If we downloaded from a cached archive, no need to regenerate archive
     const status = tl.getVariable(hash);
+    // const status = process.env[hash];
     if (status === "true") {
       console.log("Cache entry already exists for: ", hash);
       return;
     }
     // If hash was not around during the restorecache step, we assume it was produced during build
     if (status === undefined) {
-      console.log("Not caching artifact produced during build: ", hash);
+      tl.warning(`Not caching artifact produced during build: ${hash}`);
       return;
     }
 

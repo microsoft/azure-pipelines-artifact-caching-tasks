@@ -12,9 +12,6 @@ tmr.setInput("targetFolder", "**/*/node_modules");
 
 process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
 
-const key = `${process.platform}-${hash}`;
-process.env[key.toUpperCase()] = "true";
-
 // provide answers for task mock
 const a: ma.TaskLibAnswers = {
   findMatch: {
