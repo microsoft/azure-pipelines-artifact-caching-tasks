@@ -66,9 +66,13 @@ In the following example, the 'yarn' task will only run if there was not a cache
   condition: ne(variables['CacheRestored'], 'true')
 ```
 
+## Known limitations
+
+The task is designed to only cache artifacts that are produced within the build's root directory. This works best for packages that follow this convention (e.g. NPM and NuGet), but not for artifacts that are produced outside of the repo's directory (e.g. Maven).
+
 ## How to build
 
-### Prerequisites: Node and Npm
+### Prerequisites: Node and NPM
 
 **Windows and Mac OSX**: Download and install node from [nodejs.org](http://nodejs.org/)
 
