@@ -2,11 +2,13 @@
   "compilerOptions": {
     "target": "ES6",
     "module": "commonjs",
+    "declaration": true,
     "sourceMap": true,
     "plugins": [
       {
         "name": "typescript-tslint-plugin"
       }
-    ]
+    ],
+    "types": ["mocha", "node"]
   }
 }

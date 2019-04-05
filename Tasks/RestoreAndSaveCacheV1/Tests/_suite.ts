@@ -92,6 +92,32 @@ describe("RestoreCache tests", function() {
     );
     done();
   });
+
+  it("RestoreCache handles artifact tool download issues gracefully", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheArtifactToolErr.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
+    assert(
+      tr.stdOutContained("Error initializing artifact tool"),
+      "should have error initializing artifact tool"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(tr.warningIssues.length > 0, "should have warnings");
+    assert(
+      tr.stdOutContained("set CacheRestored=") !== true,
+      "'CacheRestored' variable should not be set"
+    );
+    assert(
+      tr.stdOutContained(`set ${process.platform}-${hash}=`) !== true,
+      "variable should not be set to mark key as valid in build"
+    );
+    done();
+  });
 });
 
 describe("SaveCache tests", function() {
@@ -195,13 +221,38 @@ describe("SaveCache tests", function() {
       tr.stdOutContained("Not caching artifact produced during build:"),
       "should have bailed out due to no matching hash"
     );
-    assert.equal(
-      tr.warningIssues.length > 0,
-      true,
-      "should have warnings from mismatched cache key"
+    assert(
+      tr.stdOutContained("result=Skipped;"),
+      "task result should be: 'Skipped'"
     );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    done();
+  });
+
+  it("SaveCache handles artifact tool download issues gracefully", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheArtifactToolErr.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
+    assert(
+      tr.stdOutContained("Error initializing artifact tool"),
+      "should have error initializing artifact tool"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(tr.warningIssues.length > 0, "should have warnings");
+    assert(
+      tr.stdOutContained("set CacheRestored=") !== true,
+      "'CacheRestored' variable should not be set"
+    );
+    assert(
+      tr.stdOutContained(`set ${process.platform}-${hash}=`) !== true,
+      "variable should not be set to mark key as valid in build"
+    );
     done();
   });
 

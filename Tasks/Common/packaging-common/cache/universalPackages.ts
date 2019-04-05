@@ -7,15 +7,27 @@ import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as universalDownload from "./universaldownload";
 import * as universalPublish from "./universalpublish";
 
+export interface UniversalPackagesResult {
+  toolRan: boolean;
+  success: boolean;
+}
+
 export class UniversalPackages {
   private artifactToolPath: string;
 
   public download = async function(
     hash: string,
     targetFolder: string
-  ): Promise<boolean> {
+  ): Promise<UniversalPackagesResult> {
     if (!this.artifactToolPath) {
-      await this.init();
+      const initialized = await this.init();
+      if (!initialized) {
+        console.log("Error initializing artifact tool utility");
+        return {
+          toolRan: false,
+          success: false,
+        };
+      }
     }
     return universalDownload.run(this.artifactToolPath, hash, targetFolder);
   };
@@ -23,9 +35,16 @@ export class UniversalPackages {
   public publish = async function(
     hash: string,
     targetFolder: string
-  ): Promise<boolean> {
+  ): Promise<UniversalPackagesResult> {
     if (!this.artifactToolPath) {
-      await this.init();
+      const initialized = await this.init();
+      if (!initialized) {
+        console.log("Error initializing artifact tool utility");
+        return {
+          toolRan: false,
+          success: false,
+        };
+      }
     }
     return universalPublish.run(this.artifactToolPath, hash, targetFolder);
   };
@@ -34,7 +53,7 @@ export class UniversalPackages {
     command: string,
     hash: string,
     targetFolder: string
-  ): Promise<void> {
+  ): Promise<boolean> {
     // Getting artifact tool
     tl.debug("Getting artifact tool");
 
@@ -46,7 +65,7 @@ export class UniversalPackages {
         localAccessToken
       );
       console.log(blobUri);
-      console.log("getting artifact tool path");
+
       // Finding the artifact tool directory
       this.artifactToolPath = await artifactToolUtilities.getArtifactToolFromService(
         blobUri,
@@ -54,9 +73,15 @@ export class UniversalPackages {
         "artifacttool"
       );
 
+      if (!this.artifactToolPath) {
+        return false;
+      }
+
       console.log(this.artifactToolPath);
     } catch (error) {
       console.log(error);
+      return false;
     }
+    return true;
   };
 }

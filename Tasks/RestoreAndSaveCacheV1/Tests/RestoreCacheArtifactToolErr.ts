@@ -22,9 +22,9 @@ const a: TaskLibAnswers = {
 };
 
 tmr.setAnswers(a);
+const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, null);
 
-const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, "/users/tmp/ArtifactTool.exe");
-
+// TODO: I think a non-zero code would test a miss
 umh.mockUniversalCommand(
   "download",
   "node-package-feed",

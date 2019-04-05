@@ -47,7 +47,7 @@ const a: TaskLibAnswers = {
 
 tmr.setAnswers(a);
 
-const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, "/users/tmp/ArtifactTool.exe");
+const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, null);
 
 umh.mockUniversalCommand(
   "publish",

@@ -7,11 +7,10 @@ import * as pkgMock from "./MockHelper";
 import * as artMock from "./ArtifactToolMockHelper";
 
 export class UniversalMockHelper {
-  private static ArtifactToolCmd: string = "/users/tmp/ArtifactTool.exe";
-
   constructor(
     private tmr: tmrm.TaskMockRunner,
-    private answers: TaskLibAnswers
+    private answers: TaskLibAnswers,
+    private artifactToolCmd: string
   ) {
     this.tmr.setInput("verbosity", "verbose");
     this.tmr.setInput('feedlist', 'node-package-feed');
@@ -28,11 +27,9 @@ export class UniversalMockHelper {
     process.env.SYSTEM_TEAMFOUNDATIONCOLLECTIONURI =
       "https://example.visualstudio.com/defaultcollection";
 
-    this.tmr.setAnswers(this.answers);
-
     artMock.registerArtifactToolUtilitiesMock(
       tmr,
-      UniversalMockHelper.ArtifactToolCmd
+      this.artifactToolCmd
     );
     artMock.registerArtifactToolRunnerMock(this.tmr);
     pkgMock.registerLocationHelpersMock(tmr);
@@ -53,7 +50,7 @@ export class UniversalMockHelper {
 
     this.answers.exec[
       `${
-        UniversalMockHelper.ArtifactToolCmd
+        this.artifactToolCmd
       } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
     ] = result;
   }

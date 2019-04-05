@@ -138,7 +138,7 @@ target.gendocs = function() {
 target.build = function() {
   target.clean();
 
-  ensureTool("tsc", "--version", "Version 2.3.4");
+  ensureTool("tsc", "--version", "Version 3.4.1");
   ensureTool("npm", "--version", function(output) {
     if (semver.lt(output, "5.6.0")) {
       fail("Expected 5.6.0 or higher. To fix, run: npm install -g npm");
@@ -316,7 +316,7 @@ target.build = function() {
 // node make.js test --task ShellScript --suite L0
 //
 target.test = function() {
-  ensureTool("tsc", "--version", "Version 2.3.4");
+  ensureTool("tsc", "--version", "Version 3.4.1");
   ensureTool("mocha", "--version", "6.0.2");
 
   // find the tests

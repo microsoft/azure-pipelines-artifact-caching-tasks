@@ -7,8 +7,9 @@ import { IExecSyncResult, IExecOptions } from "azure-pipelines-task-lib/toolrunn
 import * as artifactToolRunner from "../ArtifactToolRunner";
 import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as auth from "./Authentication";
+import { UniversalPackagesResult } from "./universalPackages";
 
-export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<boolean> {
+export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<UniversalPackagesResult> {
     try {
         // Get directory to publish
         const downloadDir: string = targetFolder;
@@ -63,13 +64,19 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         downloadPackageUsingArtifactTool(downloadDir, downloadOptions, toolRunnerOptions);
 
         console.log('artifact downloaded');
-        return true;
+        return {
+            toolRan: true,
+            success: true,
+          };
     } catch (err) {
         if (!err.message.includes("Can't find the package")) {
             tl.error(err);
         }
 
-        return false;
+        return {
+            toolRan: true,
+            success: false,
+          };
     }
 }
 

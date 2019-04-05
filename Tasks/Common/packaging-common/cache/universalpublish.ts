@@ -8,8 +8,9 @@ import { IExecOptions, IExecSyncResult } from "azure-pipelines-task-lib/toolrunn
 import * as artifactToolRunner from "../ArtifactToolRunner";
 import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as auth from "./Authentication";
+import { UniversalPackagesResult } from "./universalPackages";
 
-export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<boolean> {
+export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<UniversalPackagesResult> {
     const buildIdentityDisplayName: string = null;
     const buildIdentityAccount: string = null;
     try {
@@ -89,7 +90,10 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
             tl.setVariable(publishedPackageVar, `${packageName} ${version}`);
         }
 
-        return true;
+        return {
+            toolRan: true,
+            success: true,
+          };
     } catch (err) {
         tl.error(err);
 
@@ -98,7 +102,10 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         }
 
         tl.setResult(tl.TaskResult.Failed, tl.loc("PackagesFailedToPublish"));
-        return false;
+        return {
+            toolRan: true,
+            success: false,
+          };
     }
 }
 

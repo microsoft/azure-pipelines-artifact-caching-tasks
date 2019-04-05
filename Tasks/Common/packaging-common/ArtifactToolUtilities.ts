@@ -84,8 +84,10 @@ export async function getArtifactToolFromService(serviceUri: string, accessToken
         }
         return getArtifactToolLocation(artifactToolPath);
     } catch (err) {
-        tl.error(err);
-        tl.setResult(tl.TaskResult.Failed, tl.loc("FailedToGetArtifactTool", err));
+        tl.warning(err);
+        // TODO: Should return null?
+        // tl.setResult(tl.TaskResult.Failed, tl.loc("FailedToGetArtifactTool", err));
+        return null;
     }
 }
 

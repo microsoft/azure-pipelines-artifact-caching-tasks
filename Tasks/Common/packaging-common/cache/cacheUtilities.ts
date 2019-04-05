@@ -52,11 +52,11 @@ export class cacheUtilities {
     }
 
     try {
-      const result  = await universalPackages.download(hash, tmp_cache);
+      const result = await universalPackages.download(hash, tmp_cache);
 
-      // Check if blob exists
-      if (result) {
-        console.log(`tar -xzf ${tarballPath} -C "${destinationFolder}"`);
+      if (!result.toolRan) {
+        tl.warning("Issue running universal packages tools");
+      } else if (result.success) {
         try {
           shell.exec(`tar -xzf ${tarballPath} -C "${destinationFolder}"`);
 
@@ -96,7 +96,7 @@ export class cacheUtilities {
     }
     // If hash was not around during the restorecache step, we assume it was produced during build
     if (status === undefined) {
-      tl.warning(`Not caching artifact produced during build: ${hash}`);
+      tl.setResult(tl.TaskResult.Skipped, `Not caching artifact produced during build: ${hash}`);
       return;
     }
 
@@ -140,7 +140,16 @@ export class cacheUtilities {
         console.log(`Tarball created:\n    ${tarballPath}`);
 
         // Upload universal package
-        await universalPackages.publish(hash, tmp_cache);
+        const result = await universalPackages.publish(hash, tmp_cache);
+
+        if (!result.toolRan) {
+          console.log("Issue running universal packages tools");
+        } else if (result.success) {
+          console.log("Cache successfully saved");
+        } else {
+          tl.warning("Cache unsuccessfully saved. Find more information in logs above");
+        }
+
       }
     } catch (err) {
       console.log(err);

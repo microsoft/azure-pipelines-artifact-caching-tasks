@@ -1,9 +1,11 @@
 {
     "compilerOptions": {
         "target": "ES6",
-        "module": "commonjs"
+        "module": "commonjs",
+        "sourceMap": true
     },
     "exclude": [
         "node_modules"
-    ]
+    ],
+    "types": ["mocha", "node"]
 }
