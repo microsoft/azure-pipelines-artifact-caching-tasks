@@ -143,7 +143,7 @@ export class cacheUtilities {
         const result = await universalPackages.publish(hash, tmp_cache);
 
         if (!result.toolRan) {
-          console.log("Issue running universal packages tools");
+          tl.warning("Issue running universal packages tools");
         } else if (result.success) {
           console.log("Cache successfully saved");
         } else {

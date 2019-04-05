@@ -8,13 +8,6 @@ const taskPath = path.join(__dirname, "..", "savecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 const hash = "a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d";
 
-tmr.setInput("keyFile", "**/*/yarn.lock");
-tmr.setInput("targetFolder", "**/*/node_modules");
-
-const key = `${process.platform}-${hash}`.toUpperCase();
-process.env[key] = "false";
-process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
-
 // provide answers for task mock
 const a: TaskLibAnswers = {
   findMatch: {
@@ -30,7 +23,9 @@ const a: TaskLibAnswers = {
     ],
   },
   rmRF: {
-    "*": { success: true },
+    "/users/home/DefaultWorkingDirectory/tmp_cache": { success: true },
+    "DefaultWorkingDirectory/tmp_cache": {success: true},
+    "\"DefaultWorkingDirectory/tmp_cache\"": {success: true},
   },
   stats: {
     "src/webapi/node_modules": {
@@ -43,6 +38,9 @@ const a: TaskLibAnswers = {
   exist: {
       "DefaultWorkingDirectory/tmp_cache": true,
   },
+  checkPath: { },
+  exec: { },
+  which: { },
 };
 
 tmr.setAnswers(a);
@@ -54,13 +52,20 @@ umh.mockUniversalCommand(
   "node-package-feed",
   "builddefinition1",
   `1.0.0-${process.platform}-${hash}`,
-  "/users/home/directory/tmp_cache",
+  "DefaultWorkingDirectory/tmp_cache",
   {
     code: 0,
     stdout: "ArtifactTool.exe output",
     stderr: "",
   }
 );
+
+tmr.setInput("keyFile", "**/*/yarn.lock");
+tmr.setInput("targetFolder", "**/*/node_modules");
+
+const key = `${process.platform}-${hash}`.toUpperCase();
+process.env[key] = "false";
+process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
 
 // mock a specific module function called in task
 tmr.registerMock("fs", {

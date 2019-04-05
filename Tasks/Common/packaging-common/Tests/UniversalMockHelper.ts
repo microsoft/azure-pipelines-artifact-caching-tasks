@@ -47,11 +47,13 @@ export class UniversalMockHelper {
     if (!service) {
       service = "https://example.visualstudio.com/defaultcollection";
     }
-
+    console.log(`${
+      this.artifactToolCmd
+    } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_${command.toUpperCase()}_PAT --verbosity verbose`);
     this.answers.exec[
       `${
         this.artifactToolCmd
-      } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      } universal ${command} --feed ${feed} --service ${service} --package-name ${packageName} --package-version ${packageVersion} --path ${path} --patvar UNIVERSAL_${command.toUpperCase()}_PAT --verbosity verbose`
     ] = result;
   }
 }

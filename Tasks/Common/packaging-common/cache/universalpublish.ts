@@ -118,8 +118,7 @@ function publishPackageUsingArtifactTool(publishDir: string, options: artifactTo
         "--package-version", options.packageVersion,
         "--path", publishDir,
         "--patvar", "UNIVERSAL_PUBLISH_PAT",
-        "--verbosity", tl.getInput("verbosity"),
-        "--description", tl.getInput("packagePublishDescription"));
+        "--verbosity", tl.getInput("verbosity"));
 
     console.log(tl.loc("Info_Publishing", options.packageName, options.packageVersion, options.feedId));
     const execResult: IExecSyncResult = artifactToolRunner.runArtifactTool(options.artifactToolPath, command, execOptions);

@@ -253,6 +253,10 @@ describe("SaveCache tests", function() {
       tr.stdOutContained(`set ${process.platform}-${hash}=`) !== true,
       "variable should not be set to mark key as valid in build"
     );
+    assert(
+      tr.stdOutContained("Cache successfully saved") !== true,
+      "should not have saved new cache entry"
+    );
     done();
   });
 
@@ -265,8 +269,8 @@ describe("SaveCache tests", function() {
     console.log(tr.stdout);
 
     assert(
-      tr.stdOutContained("Cache entry already exists for:"),
-      "should have bailed out due to cache already present"
+      tr.stdOutContained("Cache successfully saved"),
+      "should have saved new cache entry"
     );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
