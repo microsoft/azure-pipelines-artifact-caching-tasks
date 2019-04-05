@@ -60,10 +60,6 @@ umh.mockUniversalCommand(
   }
 );
 
-const cmd = "/users/tmp/ArtifactTool.exe universal publish --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-darwin-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d --path DefaultWorkingDirectory/tmp_cache --patvar UNIVERSAL_PUBLISH_PAT --verbosity verbose";
-
-const act = "/users/tmp/ArtifactTool.exe universal publish --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-darwin-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d --path DefaultWorkingDirectory/tmp_cache --patvar UNIVERSAL_PUBLISH_PAT --verbosity verbose";
-
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolder", "**/*/node_modules");
 

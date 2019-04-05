@@ -70,7 +70,11 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
           };
     } catch (err) {
         if (!err.message.includes("Can't find the package")) {
-            tl.error(err);
+            tl.warning(err);
+            return {
+                toolRan: false,
+                success: false,
+              };
         }
 
         return {

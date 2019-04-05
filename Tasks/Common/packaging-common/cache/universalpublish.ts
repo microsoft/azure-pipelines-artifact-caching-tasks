@@ -95,13 +95,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
             success: true,
           };
     } catch (err) {
-        tl.error(err);
-
-        if (buildIdentityDisplayName || buildIdentityAccount) {
-            tl.warning(tl.loc("BuildIdentityPermissionsHint", buildIdentityDisplayName, buildIdentityAccount));
-        }
-
-        tl.setResult(tl.TaskResult.Failed, tl.loc("PackagesFailedToPublish"));
+        tl.warning(`Issue saving package: ${err}`);
         return {
             toolRan: true,
             success: false,
