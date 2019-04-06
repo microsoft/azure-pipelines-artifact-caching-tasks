@@ -24,7 +24,6 @@ const a: TaskLibAnswers = {
 tmr.setAnswers(a);
 const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, null);
 
-// TODO: I think a non-zero code would test a miss
 umh.mockUniversalCommand(
   "download",
   "node-package-feed",
