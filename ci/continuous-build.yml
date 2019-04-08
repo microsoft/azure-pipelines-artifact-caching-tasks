@@ -34,7 +34,15 @@ jobs:
           verbose: false
 
       - task: Gulp@0
-        displayName: "gulp"
+        displayName: 'gulp build'
+        inputs:
+          targets: build
+
+      - task: Gulp@0
+        displayName: 'gulp test'
+        inputs:
+          targets: test
+          arguments: '--testResults=TESTRESULTS.xml'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"
@@ -51,3 +59,8 @@ jobs:
 
       - task: PublishBuildArtifacts@1
         displayName: "Publish build artifacts"
+
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results'
+        inputs:
+          testResultsFiles: '**/TESTRESULTS.xml'
