@@ -38,8 +38,11 @@ jobs:
         inputs:
           targets: build
 
-      - script: 'node make.js test --testResults=TESTRESULTS.xml'
-        displayName: 'Run unit tests'
+      - task: Gulp@0
+        displayName: 'gulp test'
+        inputs:
+          targets: test
+          arguments: '--testResults=TESTRESULTS.xml'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"
