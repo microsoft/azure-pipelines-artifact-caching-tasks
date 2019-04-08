@@ -42,7 +42,7 @@ jobs:
         displayName: 'gulp test'
         inputs:
           targets: test
-          arguments: '--testResults=TESTRESULTS.xml'
+          # arguments: '--testResults=TESTRESULTS.xml'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"
