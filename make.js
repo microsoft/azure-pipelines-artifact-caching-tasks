@@ -347,7 +347,7 @@ target.test = function() {
     testCmd = ` --reporter mocha-junit-reporter --reporter-options mochaFile=${options.testResults}`;
 
   run(
-    "mocha " +
+    "./node_modules/mocha/bin/_mocha " +
       testsSpec.join(
         " "
       ) + testCmd,
