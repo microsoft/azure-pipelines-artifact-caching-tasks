@@ -1,7 +1,7 @@
 // parse command line options
 var minimist = require("minimist");
 var mopts = {
-  string: ["node", "runner", "server", "suite", "task", "version"]
+  string: ["node", "runner", "server", "suite", "task", "version", "testResults"]
 };
 var options = minimist(process.argv, mopts);
 
@@ -342,11 +342,15 @@ target.test = function() {
   // setup the version of node to run the tests
   util.installNode(options.node);
 
+  let testCmd = "";
+  if (options.testResults)
+    testCmd = ` --reporter mocha-junit-reporter --reporter-options mochaFile=${options.testResults}`;
+
   run(
     "mocha " +
       testsSpec.join(
         " "
-      ) /*+ ' --reporter mocha-junit-reporter --reporter-options mochaFile=../testresults/test-results.xml'*/,
+      ) + testCmd,
     /*inheritStreams:*/ true
   );
 };
