@@ -21,6 +21,9 @@ describe("RestoreCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(
       tr.warningIssues.length > 0,
@@ -41,6 +44,9 @@ describe("RestoreCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(tr.warningIssues.length, 0, "should have no warnings");
@@ -64,6 +70,9 @@ describe("RestoreCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
@@ -94,6 +103,9 @@ describe("RestoreCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
@@ -128,6 +140,9 @@ describe("RestoreCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
@@ -172,6 +187,9 @@ describe("RestoreCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert(
       tr.stdOutContained("Error initializing artifact tool"),
       "should have error initializing artifact tool"
@@ -202,6 +220,9 @@ describe("SaveCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(
       tr.warningIssues.length > 0,
@@ -223,6 +244,9 @@ describe("SaveCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(
       tr.warningIssues.length > 0,
@@ -243,6 +267,9 @@ describe("SaveCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(tr.warningIssues.length, 0, "should have no warnings");
@@ -266,6 +293,9 @@ describe("SaveCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert(
       tr.stdOutContained("Cache entry already exists for:"),
       "should have bailed out due to cache already present"
@@ -280,6 +310,9 @@ describe("SaveCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(
       tr.stdOutContained("Not caching artifact produced during build:"),
@@ -299,6 +332,9 @@ describe("SaveCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(
       tr.stdOutContained("Error initializing artifact tool"),
@@ -328,6 +364,9 @@ describe("SaveCache tests", function() {
 
     tr.run();
 
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
+
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(tr.warningIssues.length > 0, "should have warnings");
@@ -351,6 +390,9 @@ describe("SaveCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    console.log(tr.succeeded);
+    console.log(tr.stdout);
 
     assert(
       tr.stdOutContained("Cache successfully saved"),
