@@ -44,7 +44,7 @@ jobs:
       #     targets: test
       #     arguments: '--testResults=TESTRESULTS.xml'
 
-      - script: mocha _build/**/Tests/_suite.js
+      - script: ./node_modules/mocha/bin/mocha _build/**/Tests/_suite.js
         displayName: 'Mocha tests'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
