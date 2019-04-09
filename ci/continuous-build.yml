@@ -38,11 +38,14 @@ jobs:
         inputs:
           targets: build
 
-      - task: Gulp@0
-        displayName: 'gulp test'
-        inputs:
-          targets: test
-          arguments: '--testResults=TESTRESULTS.xml'
+      # - task: Gulp@0
+      #   displayName: 'gulp test'
+      #   inputs:
+      #     targets: test
+      #     arguments: '--testResults=TESTRESULTS.xml'
+
+      - script: mocha _build/**/Tests/_suite.js
+        displayName: 'Mocha tests'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"
@@ -61,7 +64,6 @@ jobs:
         displayName: "Publish build artifacts"
 
       - task: PublishTestResults@2
-        displayName: 'Publish Test Results'
+        displayName: 'Publish Test Results **/TESTRESULTS.xml'
         inputs:
           testResultsFiles: '**/TESTRESULTS.xml'
-        condition: succeededOrFailed()
