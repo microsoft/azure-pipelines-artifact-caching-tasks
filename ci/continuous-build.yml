@@ -48,7 +48,7 @@ jobs:
         displayName: 'Publish Test Results **/TESTRESULTS.xml'
         inputs:
           testResultsFiles: '**/TESTRESULTS.xml'
-        condition: succeedOrFailed()
+        condition: succeededOrFailed()
 
   - job: Package
     dependsOn: BuildAndTest
