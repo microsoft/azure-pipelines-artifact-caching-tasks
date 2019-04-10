@@ -38,14 +38,11 @@ jobs:
         inputs:
           targets: build
 
-      # - task: Gulp@0
-      #   displayName: 'gulp test'
-      #   inputs:
-      #     targets: test
-      #     arguments: '--testResults=TESTRESULTS.xml'
-
-      - script: ./node_modules/mocha/bin/mocha _build/**/Tests/_suite.js
-        displayName: 'Mocha tests'
+      - task: Gulp@0
+        displayName: 'gulp test'
+        inputs:
+          targets: test
+          arguments: '--testResults=TESTRESULTS.xml'
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"

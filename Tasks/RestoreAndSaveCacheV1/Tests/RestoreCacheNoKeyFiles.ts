@@ -2,21 +2,21 @@ import * as ma from "azure-pipelines-task-lib/mock-answer";
 import * as tmrm from "azure-pipelines-task-lib/mock-run";
 import * as path from "path";
 
-let taskPath = path.join(__dirname, "..", "restorecache.js");
-let tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
+const taskPath = path.join(__dirname, "..", "restorecache.js");
+const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolders", "**/*/node_modules");
 
 // provide answers for task mock
-var a: ma.TaskLibAnswers = <ma.TaskLibAnswers>{
+const a: ma.TaskLibAnswers = {
   findMatch: {
-    "**/*/yarn.lock": []
+    "**/*/yarn.lock": [],
   },
   rmRF: {
-    "*": { success: true }
-  }
-};
+    "*": { success: true },
+  },
+} as ma.TaskLibAnswers;
 
 tmr.setAnswers(a);
 

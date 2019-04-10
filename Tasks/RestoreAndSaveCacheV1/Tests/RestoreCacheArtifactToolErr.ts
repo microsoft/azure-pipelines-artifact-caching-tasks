@@ -6,6 +6,7 @@ import { UniversalMockHelper } from "packaging-common/Tests/UniversalMockHelper"
 
 const taskPath = path.join(__dirname, "..", "restorecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
+const hash = "2f6b1287b26ff4716cffdeeabd434aa1a3da9f092ebf87579a916ca0bf91cd65";
 
 const a: TaskLibAnswers = {
   findMatch: {
@@ -28,7 +29,7 @@ umh.mockUniversalCommand(
   "download",
   "node-package-feed",
   "builddefinition1",
-  `1.0.0-${process.platform}-a31fc58e7e95f16dca2f3fe4b096f7c0e6406086eaaea885536e9b418b2d533d`,
+  `1.0.0-${process.platform}-${hash}`,
   "/users/home/directory/tmp_cache",
   {
     code: 0,
@@ -52,7 +53,8 @@ tmr.registerMock("fs", {
         }
   ): string {
     if (path.endsWith("/yarn.lock")) {
-      return path.toString();
+      const segments = path.split('/');
+      return segments.slice(segments.length - 3).join('/');
     }
     return fs.readFileSync(path, options);
   },
