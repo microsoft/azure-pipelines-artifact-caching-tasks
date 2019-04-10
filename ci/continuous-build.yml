@@ -16,7 +16,7 @@ pr:
       - "master"
 
 jobs:
-  - job: Extension
+  - job: BuildAndTest
     pool:
       vmImage: macOS 10.13
       demands:
@@ -44,23 +44,47 @@ jobs:
           targets: test
           arguments: '--testResults=TESTRESULTS.xml'
 
-      - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
-        displayName: "Package Extension"
-        inputs:
-          extensionVersion: "$(Build.BuildNumber)"
-          extensionVisibility: public
-          updateTasksVersion: false
-
-      - task: CopyFiles@2
-        displayName: "Copy Files to staging"
-        inputs:
-          Contents: "**/*.vsix"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
-
-      - task: PublishBuildArtifacts@1
-        displayName: "Publish build artifacts"
-
       - task: PublishTestResults@2
         displayName: 'Publish Test Results **/TESTRESULTS.xml'
         inputs:
           testResultsFiles: '**/TESTRESULTS.xml'
+        condition: succeedOrFailed()
+
+  - job: Package
+      dependsOn: BuildAndTest
+      pool:
+        vmImage: macOS 10.13
+        demands:
+          - npm
+          - node.js
+
+      steps:
+        - task: NodeTool@0
+          inputs:
+            versionSpec: "8.12.0"
+
+        - task: Npm@1
+          displayName: "npm install"
+          inputs:
+            verbose: false
+
+        - task: Gulp@0
+          displayName: 'gulp build'
+          inputs:
+            targets: build
+
+        - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+          displayName: "Package Extension"
+          inputs:
+            extensionVersion: "$(Build.BuildNumber)"
+            extensionVisibility: public
+            updateTasksVersion: false
+
+        - task: CopyFiles@2
+          displayName: "Copy Files to staging"
+          inputs:
+            Contents: "**/*.vsix"
+            TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
+        - task: PublishBuildArtifacts@1
+          displayName: "Publish build artifacts"
