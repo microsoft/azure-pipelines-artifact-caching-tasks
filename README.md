@@ -66,9 +66,21 @@ In the following example, the 'yarn' task will only run if there was not a cache
   condition: ne(variables['CacheRestored'], 'true')
 ```
 
+## Onboarding
+
+1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=1ESLighthouseEng.PipelineArtifactCaching) into your Azure DevOps organization.
+2. Ensure [Azure Artifacts](https://azure.microsoft.com/en-us/services/devops/artifacts/) is enabled for your organization.
+3. Create a new Azure Artifacts feed to store caches in. After creating the feed, the GUID will be referenced in your build definition. In the examples above, `ArtifactFeed` is a build variable equal to the GUID of the Azure Artifact feed.
+
+_Note:_ The GUID for your Azure Artifact feed can be found either by using the Azure DevOps [rest apis](https://docs.microsoft.com/en-us/rest/api/azure/devops/artifacts/feed%20%20management/get%20feeds?view=azure-devops-rest-5.0#response) or by creating a build task in the traditional visual designer that references the feed and then selecting "View YAML".
+
+## Known limitations
+
+The task is designed to only cache artifacts that are produced within the build's root directory. This works best for packages that follow this convention (e.g. NPM and NuGet), but not for artifacts that are produced outside of the repo's directory (e.g. Maven).
+
 ## How to build
 
-### Prerequisites: Node and Npm
+### Prerequisites: Node and NPM
 
 **Windows and Mac OSX**: Download and install node from [nodejs.org](http://nodejs.org/)
 
