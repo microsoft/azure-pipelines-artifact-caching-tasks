@@ -16,7 +16,7 @@ pr:
       - "master"
 
 jobs:
-  - job: BuildAndTest
+  - job: Extension
     pool:
       vmImage: macOS 10.13
       demands:
@@ -44,11 +44,23 @@ jobs:
           targets: test
           arguments: '--testResults=TESTRESULTS.xml'
 
+      - script: node ./node_modules/tfx-cli/_build/tfx-cli.js extension create --manifest-globs vss-extension.json
+        displayName: 'Package Extension'
+
+      - task: CopyFiles@2
+        displayName: "Copy Files to staging"
+        inputs:
+          Contents: "**/*.vsix"
+          TargetFolder: "$(Build.ArtifactStagingDirectory)"
+
       - task: PublishTestResults@2
         displayName: 'Publish Test Results **/TESTRESULTS.xml'
         inputs:
           testResultsFiles: '**/TESTRESULTS.xml'
         condition: succeededOrFailed()
+      
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish build artifacts"
 
   - job: Package
     dependsOn: BuildAndTest
@@ -57,34 +69,3 @@ jobs:
       demands:
         - npm
         - node.js
-
-    steps:
-      - task: NodeTool@0
-        inputs:
-          versionSpec: "8.12.0"
-
-      - task: Npm@1
-        displayName: "npm install"
-        inputs:
-          verbose: false
-
-      - task: Gulp@0
-        displayName: 'gulp build'
-        inputs:
-          targets: build
-
-      - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
-        displayName: "Package Extension"
-        inputs:
-          extensionVersion: "$(Build.BuildNumber)"
-          extensionVisibility: public
-          updateTasksVersion: false
-
-      - task: CopyFiles@2
-        displayName: "Copy Files to staging"
-        inputs:
-          Contents: "**/*.vsix"
-          TargetFolder: "$(Build.ArtifactStagingDirectory)"
-
-      - task: PublishBuildArtifacts@1
-        displayName: "Publish build artifacts"
