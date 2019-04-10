@@ -61,11 +61,3 @@ jobs:
       
       - task: PublishBuildArtifacts@1
         displayName: "Publish build artifacts"
-
-  - job: Package
-    dependsOn: BuildAndTest
-    pool:
-      vmImage: macOS 10.13
-      demands:
-        - npm
-        - node.js
