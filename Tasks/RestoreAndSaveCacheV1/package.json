@@ -13,14 +13,16 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@types/mocha": "^5.2.5",
+    "@types/mocha": "^5.2.6",
     "@types/node": "^10.12.18",
     "@types/q": "^1.5.1",
     "adm-zip": "^0.4.11",
+    "azure-devops-node-api": "^7.0.0",
+    "azure-pipelines-task-lib": "^2.8.0",
+    "azure-pipelines-tool-lib": "^0.12.0",
+    "mocha": "^6.0.2",
     "packaging-common": "file:../../_build/Tasks/Common/packaging-common-1.0.1.tgz",
     "shelljs": "^0.8.3",
-    "vso-node-api": "6.5.0",
-    "vsts-task-lib": "2.6.0",
-    "vsts-task-tool-lib": "0.4.1"
+    "ts-node": "^8.0.3"
   }
 }

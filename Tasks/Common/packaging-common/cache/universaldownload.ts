@@ -1,17 +1,18 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as tl from "vsts-task-lib";
+import * as tl from "azure-pipelines-task-lib";
 import * as pkgLocationUtils from "../locationUtilities";
-import { IExecSyncResult, IExecOptions } from "vsts-task-lib/toolrunner";
-import * as artifactToolRunner from "./ArtifactToolRunner";
-import * as artifactToolUtilities from "./ArtifactToolUtilities";
+import { IExecSyncResult, IExecOptions } from "azure-pipelines-task-lib/toolrunner";
+import * as artifactToolRunner from "../ArtifactToolRunner";
+import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as auth from "./Authentication";
+import { UniversalPackagesResult } from "./universalPackages";
 
-export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<boolean> {
+export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<UniversalPackagesResult> {
     try {
         // Get directory to publish
-        let downloadDir: string = targetFolder;
+        const downloadDir: string = targetFolder;
         if (downloadDir.length < 1) {
             tl.warning(tl.loc("Info_DownloadDirectoryNotFound"));
             return;
@@ -25,7 +26,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         // Feed Auth
         let internalAuthInfo: auth.InternalAuthInfo;
 
-        let toolRunnerOptions = artifactToolRunner.getOptions();
+        const toolRunnerOptions = artifactToolRunner.getOptions();
 
         // getting inputs
         serviceUri = tl.getEndpointUrl("SYSTEMVSSCONNECTION", false);
@@ -35,9 +36,9 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         // Getting package name from hash
         const packageId = tl.getVariable('Build.DefinitionName')
             .replace(/\s/g, "")
-            .substring(0,255)
+            .substring(0, 255)
             .toLowerCase();
-            
+
         const accessToken = pkgLocationUtils.getSystemAccessToken();
 
         internalAuthInfo = new auth.InternalAuthInfo([], accessToken);
@@ -63,19 +64,29 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         downloadPackageUsingArtifactTool(downloadDir, downloadOptions, toolRunnerOptions);
 
         console.log('artifact downloaded');
-        return true;
+        return {
+            toolRan: true,
+            success: true,
+          };
     } catch (err) {
         if (!err.message.includes("Can't find the package")) {
-            tl.error(err);
+            tl.warning(err);
+            return {
+                toolRan: false,
+                success: false,
+              };
         }
 
-        return false;
+        return {
+            toolRan: true,
+            success: false,
+          };
     }
 }
 
 function downloadPackageUsingArtifactTool(downloadDir: string, options: artifactToolRunner.IArtifactToolOptions, execOptions: IExecOptions) {
 
-    let command = new Array<string>();
+    const command = new Array<string>();
 
     command.push("universal", "download",
         "--feed", options.feedId,
@@ -88,6 +99,7 @@ function downloadPackageUsingArtifactTool(downloadDir: string, options: artifact
 
     console.log(tl.loc("Info_Downloading", options.packageName, options.packageVersion, options.feedId));
     const execResult: IExecSyncResult = artifactToolRunner.runArtifactTool(options.artifactToolPath, command, execOptions);
+
     if (execResult.code === 0) {
         return;
     }

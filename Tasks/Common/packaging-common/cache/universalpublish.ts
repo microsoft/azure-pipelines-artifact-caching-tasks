@@ -3,30 +3,31 @@
 
 import * as pkgLocationUtils from "../locationUtilities";
 import { ProvenanceHelper } from "../provenance";
-import * as tl from "vsts-task-lib";
-import { IExecOptions, IExecSyncResult } from "vsts-task-lib/toolrunner";
-import * as artifactToolRunner from "./ArtifactToolRunner";
-import * as artifactToolUtilities from "./ArtifactToolUtilities";
+import * as tl from "azure-pipelines-task-lib";
+import { IExecOptions, IExecSyncResult } from "azure-pipelines-task-lib/toolrunner";
+import * as artifactToolRunner from "../ArtifactToolRunner";
+import * as artifactToolUtilities from "../ArtifactToolUtilities";
 import * as auth from "./Authentication";
+import { UniversalPackagesResult } from "./universalPackages";
 
-export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<boolean> {
-    let buildIdentityDisplayName: string = null;
-    let buildIdentityAccount: string = null;
+export async function run(artifactToolPath: string, hash: string, targetFolder: string): Promise<UniversalPackagesResult> {
+    const buildIdentityDisplayName: string = null;
+    const buildIdentityAccount: string = null;
     try {
         // Get directory to publish
-        let publishDir: string = targetFolder;
+        const publishDir: string = targetFolder;
         let serviceUri: string;
         let feedId: string;
         let packageName: string;
-        let version: string = `1.0.0-${hash}`;
+        const version: string = `1.0.0-${hash}`;
         let accessToken: string;
         let feedUri: string;
-        let publishedPackageVar: string = tl.getInput("publishedPackageVar");
+        const publishedPackageVar: string = tl.getInput("publishedPackageVar");
         const versionRadio = 'custom';
 
         let internalAuthInfo: auth.InternalAuthInfo;
 
-        let toolRunnerOptions = artifactToolRunner.getOptions();
+        const toolRunnerOptions = artifactToolRunner.getOptions();
 
         let sessionId: string;
 
@@ -35,7 +36,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
 
         packageName = tl.getVariable('Build.DefinitionName')
             .replace(/\s/g, "")
-            .substring(0,255)
+            .substring(0, 255)
             .toLowerCase();
 
         feedId = tl.getInput("feedList");
@@ -89,21 +90,21 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
             tl.setVariable(publishedPackageVar, `${packageName} ${version}`);
         }
 
-        return true;
+        return {
+            toolRan: true,
+            success: true,
+          };
     } catch (err) {
-        tl.error(err);
-
-        if (buildIdentityDisplayName || buildIdentityAccount) {
-            tl.warning(tl.loc("BuildIdentityPermissionsHint", buildIdentityDisplayName, buildIdentityAccount));
-        }
-
-        tl.setResult(tl.TaskResult.Failed, tl.loc("PackagesFailedToPublish"));
-        return false;
+        tl.warning(`Issue saving package: ${err}`);
+        return {
+            toolRan: true,
+            success: false,
+          };
     }
 }
 
 function publishPackageUsingArtifactTool(publishDir: string, options: artifactToolRunner.IArtifactToolOptions, execOptions: IExecOptions) {
-    let command = new Array<string>();
+    const command = new Array<string>();
     command.push("universal", "publish",
         "--feed", options.feedId,
         "--service", options.accountUrl,
@@ -111,8 +112,7 @@ function publishPackageUsingArtifactTool(publishDir: string, options: artifactTo
         "--package-version", options.packageVersion,
         "--path", publishDir,
         "--patvar", "UNIVERSAL_PUBLISH_PAT",
-        "--verbosity", tl.getInput("verbosity"),
-        "--description", tl.getInput("packagePublishDescription"));
+        "--verbosity", tl.getInput("verbosity"));
 
     console.log(tl.loc("Info_Publishing", options.packageName, options.packageVersion, options.feedId));
     const execResult: IExecSyncResult = artifactToolRunner.runArtifactTool(options.artifactToolPath, command, execOptions);

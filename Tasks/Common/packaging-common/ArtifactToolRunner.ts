@@ -1,12 +1,12 @@
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
-import * as tl from "vsts-task-lib";
-let fs = require("fs");
-let os = require("os");
+import * as tl from "azure-pipelines-task-lib";
+const fs = require("fs");
+const os = require("os");
 import child = require("child_process");
 import stream = require("stream");
-import {IExecOptions, IExecSyncResult} from "vsts-task-lib/toolrunner";
+import {IExecOptions, IExecSyncResult} from "azure-pipelines-task-lib/toolrunner";
 
 export interface IArtifactToolOptions {
     artifactToolPath: string;
@@ -17,21 +17,21 @@ export interface IArtifactToolOptions {
     publishedPackageVar: string;
 }
 
-export function getOptions(): IExecOptions{
-    let result: IExecOptions = <IExecOptions>{
+export function getOptions(): IExecOptions {
+    const result: IExecOptions = {
         cwd: process.cwd(),
         env: Object.assign({}, process.env),
         silent: false,
         failOnStdErr: false,
         ignoreReturnCode: false,
-        windowsVerbatimArguments: false
-    };
+        windowsVerbatimArguments: false,
+    } as IExecOptions;
     result.outStream = process.stdout as stream.Writable;
     result.errStream = process.stderr as stream.Writable;
     return result;
 }
 
-function getCommandString(toolPath: string, command: string[]){
+function getCommandString(toolPath: string, command: string[]) {
     let cmd: string = toolPath;
     command.forEach((a: string): void => {
         cmd += ` ${a}`;
@@ -39,19 +39,18 @@ function getCommandString(toolPath: string, command: string[]){
     return cmd;
 }
 
-export function runArtifactTool(artifactToolPath: string, command: string[], execOptions: IExecOptions): IExecSyncResult{
+export function runArtifactTool(artifactToolPath: string, command: string[], execOptions: IExecOptions): IExecSyncResult {
 
     if (tl.osType() === "Windows_NT" || artifactToolPath.trim().toLowerCase().endsWith(".exe")) {
         return tl.execSync(artifactToolPath, command, execOptions);
-    }
-    else{
+    } else {
         fs.chmodSync(artifactToolPath, "755");
 
         if (!execOptions.silent) {
             execOptions.outStream.write(getCommandString(artifactToolPath, command) + os.EOL);
         }
 
-        let result = child.spawnSync(artifactToolPath, command, execOptions);
+        const result = child.spawnSync(artifactToolPath, command, execOptions);
 
         if (!execOptions.silent && result.stdout && result.stdout.length > 0) {
             execOptions.outStream.write(result.stdout);
@@ -61,7 +60,7 @@ export function runArtifactTool(artifactToolPath: string, command: string[], exe
             execOptions.errStream.write(result.stderr);
         }
 
-        let res: IExecSyncResult = <IExecSyncResult>{ code: result.status, error: result.error };
+        const res: IExecSyncResult = { code: result.status, error: result.error } as IExecSyncResult;
         res.stdout = (result.stdout) ? result.stdout.toString() : null;
         res.stderr = (result.stderr) ? result.stderr.toString() : null;
         return res;
