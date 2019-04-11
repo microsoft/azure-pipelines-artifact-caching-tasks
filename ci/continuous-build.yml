@@ -18,7 +18,7 @@ pr:
 jobs:
   - job: Extension
     pool:
-      vmImage: macOS 10.13
+      vmImage: VS2017-Win2016 # macOS 10.13
       demands:
         - npm
         - node.js
@@ -50,14 +50,6 @@ jobs:
           extensionVersion: "$(Build.BuildNumber)"
           extensionVisibility: public
           updateTasksVersion: false
-
-      - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
-        displayName: "Package Extension"
-        inputs:
-          extensionVersion: "$(Build.BuildNumber)"
-          extensionVisibility: public
-          updateTasksVersion: false
-        condition: succeededOrFailed()
 
       - task: CopyFiles@2
         displayName: "Copy Files to staging"
