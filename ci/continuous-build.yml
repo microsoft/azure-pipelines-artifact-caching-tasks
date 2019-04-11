@@ -22,7 +22,6 @@ jobs:
       demands:
         - npm
         - node.js
-        - tfx-cli
 
     steps:
       - task: NodeTool@0
@@ -51,6 +50,14 @@ jobs:
           extensionVersion: "$(Build.BuildNumber)"
           extensionVisibility: public
           updateTasksVersion: false
+
+      - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+        displayName: "Package Extension"
+        inputs:
+          extensionVersion: "$(Build.BuildNumber)"
+          extensionVisibility: public
+          updateTasksVersion: false
+        condition: succeededOrFailed()
 
       - task: CopyFiles@2
         displayName: "Copy Files to staging"
