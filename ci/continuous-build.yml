@@ -22,6 +22,7 @@ jobs:
       demands:
         - npm
         - node.js
+        - tfx-cli
 
     steps:
       - task: NodeTool@0
