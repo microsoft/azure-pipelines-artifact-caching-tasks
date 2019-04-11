@@ -16,9 +16,9 @@ pr:
       - "master"
 
 jobs:
-  - job: Extension
+  - job: BuildAndTest
     pool:
-      vmImage: VS2017-Win2016 # macOS 10.13
+      vmImage: macOS 10.13
       demands:
         - npm
         - node.js
@@ -44,6 +44,35 @@ jobs:
           targets: test
           arguments: '--testResults=TESTRESULTS.xml'
 
+      - task: PublishTestResults@2
+        displayName: 'Publish Test Results **/TESTRESULTS.xml'
+        inputs:
+          testResultsFiles: '**/TESTRESULTS.xml'
+        condition: succeededOrFailed()
+        
+  - job: Package
+    dependsOn: BuildAndTest
+    pool:
+      vmImage: VS2017-Win2016
+      demands:
+        - npm
+        - node.js
+
+    steps:
+      - task: NodeTool@0
+        inputs:
+          versionSpec: "8.12.0"
+
+      - task: Npm@1
+        displayName: "npm install"
+        inputs:
+          verbose: false
+
+      - task: Gulp@0
+        displayName: 'gulp build'
+        inputs:
+          targets: build
+
       - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
         displayName: "Package Extension"
         inputs:
@@ -56,12 +85,6 @@ jobs:
         inputs:
           Contents: "**/*.vsix"
           TargetFolder: "$(Build.ArtifactStagingDirectory)"
-
-      - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TESTRESULTS.xml'
-        inputs:
-          testResultsFiles: '**/TESTRESULTS.xml'
-        condition: succeededOrFailed()
       
       - task: PublishBuildArtifacts@1
         displayName: "Publish build artifacts"
