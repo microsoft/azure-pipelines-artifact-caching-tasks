@@ -44,8 +44,12 @@ jobs:
           targets: test
           arguments: '--testResults=TESTRESULTS.xml'
 
-      - script: node ./node_modules/tfx-cli/_build/tfx-cli.js extension create --manifest-globs vss-extension.json
-        displayName: 'Package Extension'
+      - task: ms-devlabs.vsts-developer-tools-build-tasks.package-extension-build-task.PackageVSTSExtension@1
+        displayName: "Package Extension"
+        inputs:
+          extensionVersion: "$(Build.BuildNumber)"
+          extensionVisibility: public
+          updateTasksVersion: false
 
       - task: CopyFiles@2
         displayName: "Copy Files to staging"
