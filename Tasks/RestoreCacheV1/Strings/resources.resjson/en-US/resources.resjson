@@ -3,8 +3,6 @@
   "loc.helpMarkDown": "",
   "loc.description": "Restore a folder from a cache given a specified key.",
   "loc.instanceNameFormat": "Restore artifact based on: $(keyfile)",
-  "loc.input.label.cwd": "Working directory",
-  "loc.input.help.cwd": "The root folder of the files to cache. Defaults to the default working directory.",
   "loc.input.label.keyfile": "Key file",
   "loc.input.help.keyfile": "The filename or wildcard used as the key to lookup the cache folder. For example, for npm based projects this would be '**/package-lock.json'.",
   "loc.input.label.targetfolder": "Target folder",

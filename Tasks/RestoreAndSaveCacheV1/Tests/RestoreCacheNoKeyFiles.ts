@@ -5,6 +5,7 @@ import * as path from "path";
 const taskPath = path.join(__dirname, "..", "restorecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
+tmr.setInput("cwd", "$(System.DefaultWorkingDirectory)");
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolders", "**/*/node_modules");
 
