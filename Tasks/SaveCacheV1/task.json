@@ -14,6 +14,14 @@
     "instanceNameFormat": "Save artifact based on: $(keyfile)",
     "inputs": [
         {
+            "name": "cwd",
+            "type": "filePath",
+            "label": "Working directory",
+            "defaultValue": "$(System.DefaultWorkingDirectory)",
+            "required": true,
+            "helpMarkDown": "The root folder of the files to cache. Defaults to the default working directory."
+        },
+        {
             "name": "keyfile",
             "type": "filePath",
             "label": "Key file",

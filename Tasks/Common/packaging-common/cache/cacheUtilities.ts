@@ -38,7 +38,7 @@ export class cacheUtilities {
 
     // Make our working folder
     const tmp_cache = path.join(
-      tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
+      tl.getPathInput("cwd", false) || tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
       "tmp_cache"
     );
     let tarballPath = path.join(tmp_cache, hash + ".tar.gz");
@@ -104,7 +104,7 @@ export class cacheUtilities {
 
     // Make our working folder
     const tmp_cache = path.join(
-      tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
+      tl.getPathInput("cwd", false) || tl.getVariable("System.DefaultWorkingDirectory") || process.cwd(),
       "tmp_cache"
     );
     tl.mkdirP(tmp_cache);
@@ -194,7 +194,7 @@ export class cacheUtilities {
       } as tl.FindOptions;
 
       const files: string[] = tl.findMatch(
-        tl.getVariable("System.DefaultWorkingDirectory"),
+        tl.getPathInput("cwd", false) || tl.getVariable("System.DefaultWorkingDirectory"),
         patterns,
         findOptions
       );
@@ -209,7 +209,7 @@ export class cacheUtilities {
 
       await this.downloadCaches(
         files,
-        tl.getVariable("System.DefaultWorkingDirectory") || process.cwd()
+        tl.getPathInput("cwd", false) || tl.getVariable("System.DefaultWorkingDirectory") || process.cwd()
       );
     } catch (err) {
       console.log(`error: ${err}`);
@@ -254,7 +254,7 @@ export class cacheUtilities {
       } as tl.FindOptions;
 
       const keyFiles: string[] = tl.findMatch(
-        tl.getVariable("System.DefaultWorkingDirectory"),
+        tl.getPathInput("cwd", false) || tl.getVariable("System.DefaultWorkingDirectory"),
         patterns,
         findOptions
       );
@@ -268,8 +268,8 @@ export class cacheUtilities {
       }
 
       // Construct this list of artifacts to store. These are relative to prevent the full path from
-      const searchDirectory =
-        tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
+      const searchDirectory = tl.getPathInput("cwd", false)
+        || tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
       const allPaths = tl.find(searchDirectory);
       const matchedPaths: string[] = tl.match(allPaths, targetPatterns);
       const targetFolders: string[] = matchedPaths

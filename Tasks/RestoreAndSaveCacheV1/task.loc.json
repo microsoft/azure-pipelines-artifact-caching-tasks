@@ -14,6 +14,14 @@
   "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
   "inputs": [
     {
+      "name": "cwd",
+      "type": "filePath",
+      "label": "ms-resource:loc.input.label.cwd",
+      "defaultValue": "$(System.DefaultWorkingDirectory)",
+      "required": true,
+      "helpMarkDown": "ms-resource:loc.input.help.cwd"
+    },
+    {
       "name": "keyfile",
       "type": "filePath",
       "label": "ms-resource:loc.input.label.keyfile",

@@ -3,6 +3,8 @@
   "loc.helpMarkDown": "",
   "loc.description": "Saves a cache with Universal Artifacts given a specified key.",
   "loc.instanceNameFormat": "Save artifact based on: $(keyfile)",
+  "loc.input.label.cwd": "Working directory",
+  "loc.input.help.cwd": "The root folder of the files to cache. Defaults to the default working directory.",
   "loc.input.label.keyfile": "Key file",
   "loc.input.help.keyfile": "The filename or wildcard used as the key to lookup the cache folder. For example, for npm based projects this would be '**/package-lock.json'.",
   "loc.input.label.targetfolder": "Target folder",
