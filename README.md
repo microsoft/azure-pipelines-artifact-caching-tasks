@@ -78,6 +78,8 @@ _Note:_ The GUID for your Azure Artifact feed can be found either by using the A
 
 The task is designed to only cache artifacts that are produced within the build's root directory. This works best for packages that follow this convention (e.g. NPM and NuGet), but not for artifacts that are produced outside of the repo's directory (e.g. Maven).
 
+The task skips restoring and saving caches on forked repositories by design. This is a security measure to protect cached artifacts from forked sources and a limitation from the Azure Artifacts permissions model (users of forked repositories don't have access to download these artifacts).
+
 ## How to build
 
 ### Prerequisites: Node and NPM
