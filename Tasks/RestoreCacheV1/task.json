@@ -58,6 +58,12 @@
             }
         }
     ],
+    "outputVariables": [
+        {
+            "name": "CacheRestored",
+            "description": "Set to `true` when the cache is successfully restored."
+        }
+    ],
     "dataSourceBindings": [
         {
             "target": "feedList",
