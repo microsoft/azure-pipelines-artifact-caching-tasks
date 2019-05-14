@@ -10,7 +10,9 @@ before(function() {
 const hash = "2f6b1287b26ff4716cffdeeabd434aa1a3da9f092ebf87579a916ca0bf91cd65";
 
 describe("RestoreCache tests", function() {
-  before(function() { });
+  before(function() { 
+    process.env["SYSTEM_PULLREQUEST_ISFORK"] = "false";
+  });
 
   after(() => { });
 
@@ -198,7 +200,9 @@ describe("RestoreCache tests", function() {
 });
 
 describe("SaveCache tests", function() {
-  before(function() { });
+  before(function() { 
+    process.env["SYSTEM_PULLREQUEST_ISFORK"] = "false";
+  });
 
   after(() => { });
 

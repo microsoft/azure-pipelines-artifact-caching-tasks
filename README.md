@@ -49,7 +49,7 @@ If you do not want to add two build steps to your build definition, you can also
 
 ## Optimistic cache restoration
 
-If a cache was restored successfully, the build variable `CacheRestored` is set to `true`. This can provide a further perfomance boost by optionally skipping package install commands entirely.
+If a cache was restored successfully, the build variable `CacheRestored` is set to `true`. This can provide a further performance boost by optionally skipping package install commands entirely.
 
 In the following example, the 'yarn' task will only run if there was not a cache hit. Although this can provide faster builds, it may not be suitable for production builds.
 
