@@ -58,6 +58,12 @@
       }
     }
   ],
+  "outputVariables": [
+    {
+      "name": "CacheRestored",
+      "description": "ms-resource:loc.outputVariables.description.cacheRestored"
+    }
+  ],
   "dataSourceBindings": [
     {
       "target": "feedList",
