@@ -60,6 +60,7 @@ umh.mockUniversalCommand(
   }
 );
 
+tmr.setInput("cwd", "$(System.DefaultWorkingDirectory)");
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolder", "**/*/node_modules");
 

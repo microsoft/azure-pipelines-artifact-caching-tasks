@@ -43,6 +43,7 @@ const a: TaskLibAnswers = {
   which: { },
 };
 
+tmr.setInput("cwd", "$(System.DefaultWorkingDirectory)");
 tmr.setAnswers(a);
 
 const umh: UniversalMockHelper = new UniversalMockHelper(tmr, a, "/users/tmp/ArtifactTool.exe");

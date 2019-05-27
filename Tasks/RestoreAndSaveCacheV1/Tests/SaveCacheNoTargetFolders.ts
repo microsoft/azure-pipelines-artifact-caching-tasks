@@ -5,6 +5,7 @@ import * as path from "path";
 const taskPath = path.join(__dirname, "..", "savecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
+tmr.setInput("cwd", "$(System.DefaultWorkingDirectory)");
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolder", "**/*/node_modules");
 process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
