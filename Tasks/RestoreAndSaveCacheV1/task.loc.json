@@ -9,7 +9,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 10
+    "Patch": 11
   },
   "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
   "inputs": [
@@ -64,12 +64,6 @@
         "Error": "Error",
         "Critical": "Citical"
       }
-    }
-  ],
-  "outputVariables": [
-    {
-      "name": "CacheRestored",
-      "description": "Set to `true` when the cache is successfully restored."
     }
   ],
   "dataSourceBindings": [
