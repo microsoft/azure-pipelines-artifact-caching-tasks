@@ -5,48 +5,20 @@ import { TaskLibAnswers } from "azure-pipelines-task-lib/mock-answer";
 import { UniversalMockHelper } from "packaging-common/Tests/UniversalMockHelper";
 import { Constants } from "./Constants";
 
-const taskPath = path.join(__dirname, "..", "savecache.js");
+const taskPath = path.join(__dirname, "..", "restorecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
-// provide answers for task mock
 const a: TaskLibAnswers = {
   findMatch: {
     "**/*/yarn.lock": ["src/webapi/yarn.lock", "src/application/yarn.lock"],
-    "**/*/node_modules": [
-      "src/webapi/node_modules",
-      "src/application/node_modules"
-    ]
-  },
-  find: {
-    DefaultWorkingDirectory: [
-      "src/webapi/node_modules",
-      "src/application/node_modules",
-      "src/webapi/startup.config",
-      "src/application/program.cs"
-    ]
+    "**/*/node_modules": []
   },
   rmRF: {
-    "/users/home/DefaultWorkingDirectory/tmp_cache": { success: true },
-    "DefaultWorkingDirectory/tmp_cache": { success: true },
-    '"DefaultWorkingDirectory/tmp_cache"': { success: true }
-  },
-  stats: {
-    "src/webapi/node_modules": {
-      isDirectory() {
-        return true;
-      }
-    },
-    "src/application/node_modules": {
-      isDirectory() {
-        return true;
-      }
-    }
-  },
-  exist: {
-    "DefaultWorkingDirectory/tmp_cache": true
+    "/users/home/directory/tmp_cache": { success: true }
   },
   checkPath: {},
   exec: {},
+  exist: {},
   which: {}
 };
 
@@ -59,25 +31,21 @@ const umh: UniversalMockHelper = new UniversalMockHelper(
 );
 
 umh.mockUniversalCommand(
-  "publish",
+  "download",
   "node-package-feed",
   "builddefinition1",
-  `1.0.0-${process.platform}-${Constants.Hash}`,
-  "DefaultWorkingDirectory/tmp_cache",
+  `1.0.0-${Constants.Hash}`,
+  "/users/home/directory/tmp_cache",
   {
-    code: 1,
+    code: 0,
     stdout: "ArtifactTool.exe output",
-    stderr:
-      "An error occurred on the service. User lacks permission to complete this action."
+    stderr: ""
   }
 );
 
 tmr.setInput("keyFile", "**/*/yarn.lock");
-tmr.setInput("targetFolder", "**/*/node_modules");
-
-const key = `${process.platform}-${Constants.Hash}`.toUpperCase();
-process.env[key] = "false";
-process.env["SYSTEM_DEFAULTWORKINGDIRECTORY"] = "DefaultWorkingDirectory";
+tmr.setInput("targetFolders", "**/*/node_modules");
+tmr.setInput("platformIndependent", "true");
 
 // mock a specific module function called in task
 tmr.registerMock("fs", {
