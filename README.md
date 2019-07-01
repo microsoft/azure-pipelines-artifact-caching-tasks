@@ -66,6 +66,22 @@ In the following example, the 'yarn' task will only run if there was not a cache
   condition: ne(variables['CacheRestored'], 'true')
 ```
 
+## Platform independent caches
+
+By default, cached archives are platform _dependent_ to support the small differences that may occur in packages produced for a specific platform. If you are certain that the cached archive will be platform _independent_, you can set the task variable `platformIndependent` to true and all platforms will restore the same archive.
+
+For example:
+
+```yaml
+- task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreCacheV1.RestoreCache@1
+  inputs:
+    keyfile: keyfile
+    targetfolder: bin
+    vstsFeed: $(ArtifactFeed)
+    platformIndependent: true
+
+```
+
 ## Onboarding
 
 1. Install the extension from the [marketplace](https://marketplace.visualstudio.com/items?itemName=1ESLighthouseEng.PipelineArtifactCaching) into your Azure DevOps organization.
