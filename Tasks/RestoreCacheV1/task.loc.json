@@ -61,7 +61,7 @@
   "outputVariables": [
     {
       "name": "CacheRestored",
-      "description": "ms-resource:loc.outputVariables.description.cacheRestored"
+      "description": "Set to `true` when the cache is successfully restored."
     }
   ],
   "dataSourceBindings": [

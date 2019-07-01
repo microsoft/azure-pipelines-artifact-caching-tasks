@@ -10,7 +10,6 @@
   "loc.input.label.feedList": "Feed",
   "loc.input.label.verbosity": "Verbosity",
   "loc.input.help.verbosity": "Specifies the amount of detail displayed in the output.",
-  "loc.outputVariables.description.cacheRestored": "Set to `true` when the cache is successfully restored.",
   "loc.messages.PackagesDownloadedSuccessfully": "Package were downloaded successfully",
   "loc.messages.PackagesFailedToDownload": "Packages failed to download",
   "loc.messages.ConnectingAs": "Connecting to feeds in your Azure Pipelines/TFS project collection as '%s' [%s]",

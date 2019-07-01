@@ -2,42 +2,40 @@ import * as path from "path";
 import * as assert from "assert";
 import * as ttm from "azure-pipelines-task-lib/mock-test";
 import { platform } from "os";
+import { Constants } from "./Constants";
 
 before(function() {
   this.timeout(5000);
 });
 
-const hash = "2f6b1287b26ff4716cffdeeabd434aa1a3da9f092ebf87579a916ca0bf91cd65";
-
 describe("RestoreCache tests", function() {
-  before(function() { 
+  before(function() {
     process.env["SYSTEM_PULLREQUEST_ISFORK"] = "false";
   });
 
-  after(() => { });
+  after(() => {});
 
-  it("RestoreCache runs successfully with warnings if no key files are found",
-    function(done: MochaDone) {
-      const tp = path.join(__dirname, "RestoreCacheNoKeyFiles.js");
-      const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+  it("RestoreCache runs successfully with warnings if no key files are found", function(done: MochaDone) {
+    const tp = path.join(__dirname, "RestoreCacheNoKeyFiles.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
-      tr.run();
+    tr.run();
 
-      assert.equal(tr.succeeded, true, "should have succeeded");
-      assert.equal(
-        tr.warningIssues.length > 0,
-        true,
-        "should have warnings from key file"
-      );
-      assert.equal(tr.errorIssues.length, 0, "should have no errors");
-      assert.equal(
-        tr.stdout.indexOf("no key files matching:") >= 0,
-        true,
-        "should display 'no key files matching:'"
-      );
+    assert.equal(tr.succeeded, true, "should have succeeded");
+    assert.equal(
+      tr.warningIssues.length > 0,
+      true,
+      "should have warnings from key file"
+    );
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert.equal(
+      tr.stdout.indexOf("no key files matching:") >= 0,
+      true,
+      "should display 'no key files matching:'"
+    );
 
-      done();
-    });
+    done();
+  });
 
   it("RestoreCache is skipped if run from repository fork", function(done: MochaDone) {
     const tp = path.join(__dirname, "RestoreCacheFromFork.js");
@@ -49,16 +47,16 @@ describe("RestoreCache tests", function() {
     assert.equal(tr.warningIssues.length, 0, "should have no warnings");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert.equal(
-        tr.stdout.indexOf("result=Skipped;") >= 0,
-        true,
-        "task result should be: 'Skipped'"
-      );
+      tr.stdout.indexOf("result=Skipped;") >= 0,
+      true,
+      "task result should be: 'Skipped'"
+    );
     assert.equal(
-        tr.stdout.indexOf("Caches are not restored for forked repositories.") >=
+      tr.stdout.indexOf("Caches are not restored for forked repositories.") >=
         0,
-        true,
-        "should display 'Caches are not restored for forked repositories.'"
-      );
+      true,
+      "should display 'Caches are not restored for forked repositories.'"
+    );
 
     done();
   });
@@ -71,25 +69,62 @@ describe("RestoreCache tests", function() {
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
-        tr.ran(
-          `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
-        ),
-        "it should have run ArtifactTool"
-      );
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          process.platform
+        }-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
     assert(
-        tr.stdOutContained("ArtifactTool.exe output"),
-        "should have ArtifactTool output"
-      );
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(
-        tr.stdOutContained("set CacheRestored=true"),
-        "'CacheRestored' variable should be set to true"
-      );
+      tr.stdOutContained("set CacheRestored=true"),
+      "'CacheRestored' variable should be set to true"
+    );
     assert(
-        tr.stdOutContained(`${process.platform}-${hash}=true`),
-        "variable should be set to mark key as valid in build"
-      );
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=true`),
+      "variable should be set to mark key as valid in build"
+    );
+
+    done();
+  });
+
+  it("RestoreCache runs successfully if cache hit", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheCacheHitPlatIndependent.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
+    assert(
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool for plat-independent hash"
+    );
+    assert(
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored=true"),
+      "'CacheRestored' variable should be set to true"
+    );
+    assert(
+      tr.stdOutContained(`${Constants.Hash}=true`),
+      "variable should be set to mark key as valid (and plat-independent) in build"
+    );
 
     done();
   });
@@ -102,29 +137,33 @@ describe("RestoreCache tests", function() {
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
-        tr.ran(
-          `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
-        ),
-        "it should have run ArtifactTool"
-      );
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          process.platform
+        }-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
     assert(
-        tr.stdOutContained("ArtifactTool.exe output"),
-        "should have ArtifactTool output"
-      );
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
     assert(
-        tr.stdOutContained(`Cache miss:  ${process.platform}-${hash}`),
-        "should have output stating cache miss"
-      );
+      tr.stdOutContained(`Cache miss:  ${process.platform}-${Constants.Hash}`),
+      "should have output stating cache miss"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(
-        tr.stdOutContained("set CacheRestored=false"),
-        "'CacheRestored' variable should be set to false"
-      );
+      tr.stdOutContained("set CacheRestored=false"),
+      "'CacheRestored' variable should be set to false"
+    );
     assert(
-        tr.stdOutContained(`${process.platform}-${hash}=false`),
-        "variable should be set to mark key as valid in build"
-      );
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=false`),
+      "variable should be set to mark key as valid in build"
+    );
 
     done();
   });
@@ -137,38 +176,46 @@ describe("RestoreCache tests", function() {
 
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
-        tr.ran(
-          `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
-        ),
-        "it should have run ArtifactTool"
-      );
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          process.platform
+        }-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
     assert(
-        tr.stdOutContained("ArtifactTool.exe output"),
-        "should have ArtifactTool output"
-      );
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
     assert(
-        tr.stdOutContained(`Cache miss:  ${process.platform}-${hash}`) !== true,
-        "should not have output stating cache miss"
-      );
+      tr.stdOutContained(
+        `Cache miss:  ${process.platform}-${Constants.Hash}`
+      ) !== true,
+      "should not have output stating cache miss"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(tr.warningIssues.length > 0, "should have permissions warnings");
     assert(
-        tr.stdOutContained("warning;]Error: An unexpected error occurred while trying to download the package. Exit code(1) and error(An error occurred on the service. User lacks permission to complete this action.)"),
-        "There should be a warning about permissions"
-      );
+      tr.stdOutContained(
+        "warning;]Error: An unexpected error occurred while trying to download the package. Exit code(1) and error(An error occurred on the service. User lacks permission to complete this action.)"
+      ),
+      "There should be a warning about permissions"
+    );
     assert(
-        tr.stdOutContained("warning;]Issue running universal packages tools"),
-        "There should be a warning about universal packages tools"
-      );
+      tr.stdOutContained("warning;]Issue running universal packages tools"),
+      "There should be a warning about universal packages tools"
+    );
     assert(
-        tr.stdOutContained("set CacheRestored=false") !== true,
-        "'CacheRestored' variable should not be set"
-      );
+      tr.stdOutContained("set CacheRestored=false") !== true,
+      "'CacheRestored' variable should not be set"
+    );
     assert(
-        tr.stdOutContained(`${process.platform}-${hash}=`) !== true,
-        "variable should not be set to mark key as valid in build"
-      );
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=`) !== true,
+      "variable should not be set to mark key as valid in build"
+    );
 
     done();
   });
@@ -180,31 +227,31 @@ describe("RestoreCache tests", function() {
     tr.run();
 
     assert(
-        tr.stdOutContained("Error initializing artifact tool"),
-        "should have error initializing artifact tool"
-      );
+      tr.stdOutContained("Error initializing artifact tool"),
+      "should have error initializing artifact tool"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(tr.warningIssues.length > 0, "should have warnings");
     assert(
-        tr.stdOutContained("set CacheRestored=") !== true,
-        "'CacheRestored' variable should not be set"
-      );
+      tr.stdOutContained("set CacheRestored=") !== true,
+      "'CacheRestored' variable should not be set"
+    );
     assert(
-        tr.stdOutContained(`set ${process.platform}-${hash}=`) !== true,
-        "variable should not be set to mark key as valid in build"
-      );
+      tr.stdOutContained(`set ${process.platform}-${Constants.Hash}=`) !== true,
+      "variable should not be set to mark key as valid in build"
+    );
 
     done();
   });
 });
 
 describe("SaveCache tests", function() {
-  before(function() { 
+  before(function() {
     process.env["SYSTEM_PULLREQUEST_ISFORK"] = "false";
   });
 
-  after(() => { });
+  after(() => {});
 
   it("SaveCache runs successfully with warnings if no key files are found", function(done: MochaDone) {
     const tp = path.join(__dirname, "SaveCacheNoKeyFiles.js");
@@ -214,16 +261,16 @@ describe("SaveCache tests", function() {
 
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(
-        tr.warningIssues.length > 0,
-        true,
-        "should have warnings from key file"
-      );
+      tr.warningIssues.length > 0,
+      true,
+      "should have warnings from key file"
+    );
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert.equal(
-        tr.stdout.indexOf("no key files matching:") >= 0,
-        true,
-        "should display 'no key files matching:'"
-      );
+      tr.stdout.indexOf("no key files matching:") >= 0,
+      true,
+      "should display 'no key files matching:'"
+    );
 
     done();
   });
@@ -236,16 +283,16 @@ describe("SaveCache tests", function() {
 
     assert.equal(tr.succeeded, true, "should have succeeded");
     assert.equal(
-        tr.warningIssues.length > 0,
-        true,
-        "should have warnings from target folder"
-      );
+      tr.warningIssues.length > 0,
+      true,
+      "should have warnings from target folder"
+    );
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert.equal(
-        tr.stdout.indexOf("no target folders matching:") >= 0,
-        true,
-        "should display 'no target folders matching:'"
-      );
+      tr.stdout.indexOf("no target folders matching:") >= 0,
+      true,
+      "should display 'no target folders matching:'"
+    );
 
     done();
   });
@@ -260,15 +307,15 @@ describe("SaveCache tests", function() {
     assert.equal(tr.warningIssues.length, 0, "should have no warnings");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert.equal(
-        tr.stdout.indexOf("result=Skipped;") >= 0,
-        true,
-        "task result should be: 'Skipped'"
-      );
+      tr.stdout.indexOf("result=Skipped;") >= 0,
+      true,
+      "task result should be: 'Skipped'"
+    );
     assert.equal(
-        tr.stdout.indexOf("Caches are not saved from forked repositories.") >= 0,
-        true,
-        "should display 'Caches are not saved from forked repositories.'"
-      );
+      tr.stdout.indexOf("Caches are not saved from forked repositories.") >= 0,
+      true,
+      "should display 'Caches are not saved from forked repositories.'"
+    );
 
     done();
   });
@@ -280,9 +327,9 @@ describe("SaveCache tests", function() {
     tr.run();
 
     assert(
-        tr.stdOutContained("Cache entry already exists for:"),
-        "should have bailed out due to cache already present"
-      );
+      tr.stdOutContained("Cache entry already exists for:"),
+      "should have bailed out due to cache already present"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
 
@@ -296,13 +343,13 @@ describe("SaveCache tests", function() {
     tr.run();
 
     assert(
-        tr.stdOutContained("Not caching artifact produced during build:"),
-        "should have bailed out due to no matching hash"
-      );
+      tr.stdOutContained("Not caching artifact produced during build:"),
+      "should have bailed out due to no matching hash"
+    );
     assert(
-        tr.stdOutContained("result=Skipped;"),
-        "task result should be: 'Skipped'"
-      );
+      tr.stdOutContained("result=Skipped;"),
+      "task result should be: 'Skipped'"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
 
@@ -316,24 +363,24 @@ describe("SaveCache tests", function() {
     tr.run();
 
     assert(
-        tr.stdOutContained("Error initializing artifact tool"),
-        "should have error initializing artifact tool"
-      );
+      tr.stdOutContained("Error initializing artifact tool"),
+      "should have error initializing artifact tool"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(tr.warningIssues.length > 0, "should have warnings");
     assert(
-        tr.stdOutContained("set CacheRestored=") !== true,
-        "'CacheRestored' variable should not be set"
-      );
+      tr.stdOutContained("set CacheRestored=") !== true,
+      "'CacheRestored' variable should not be set"
+    );
     assert(
-        tr.stdOutContained(`set ${process.platform}-${hash}=`) !== true,
-        "variable should not be set to mark key as valid in build"
-      );
+      tr.stdOutContained(`set ${process.platform}-${Constants.Hash}=`) !== true,
+      "variable should not be set to mark key as valid in build"
+    );
     assert(
-        tr.stdOutContained("Cache successfully saved") !== true,
-        "should not have saved new cache entry"
-      );
+      tr.stdOutContained("Cache successfully saved") !== true,
+      "should not have saved new cache entry"
+    );
 
     done();
   });
@@ -348,17 +395,21 @@ describe("SaveCache tests", function() {
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(tr.warningIssues.length > 0, "should have warnings");
     assert(
-        tr.stdOutContained("warning;]Issue saving package: Error: An unexpected error occurred while trying to push the package. Exit code(1) and error(An error occurred on the service. User lacks permission to complete this action.)"),
-        "There should be a warning about permissions"
-      );
+      tr.stdOutContained(
+        "warning;]Issue saving package: Error: An unexpected error occurred while trying to push the package. Exit code(1) and error(An error occurred on the service. User lacks permission to complete this action.)"
+      ),
+      "There should be a warning about permissions"
+    );
     assert(
-        tr.stdOutContained("warning;]Cache unsuccessfully saved. Find more information in logs above"),
-        "There should be a warning about cache not being saved"
-      );
+      tr.stdOutContained(
+        "warning;]Cache unsuccessfully saved. Find more information in logs above"
+      ),
+      "There should be a warning about cache not being saved"
+    );
     assert(
-        tr.stdOutContained("Cache successfully saved") !== true,
-        "should not have saved new cache entry"
-      );
+      tr.stdOutContained("Cache successfully saved") !== true,
+      "should not have saved new cache entry"
+    );
 
     done();
   });
@@ -370,9 +421,9 @@ describe("SaveCache tests", function() {
     tr.run();
 
     assert(
-        tr.stdOutContained("Cache successfully saved"),
-        "should have saved new cache entry"
-      );
+      tr.stdOutContained("Cache successfully saved"),
+      "should have saved new cache entry"
+    );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
 
