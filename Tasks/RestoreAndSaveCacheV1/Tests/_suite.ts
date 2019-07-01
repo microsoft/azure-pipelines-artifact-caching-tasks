@@ -96,7 +96,7 @@ describe("RestoreCache tests", function() {
     done();
   });
 
-  it("RestoreCache runs successfully if cache hit", (done: MochaDone) => {
+  it("RestoreCache runs successfully if cache hit for plat-independant cache", (done: MochaDone) => {
     const tp = path.join(__dirname, "RestoreCacheCacheHitPlatIndependent.js");
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
