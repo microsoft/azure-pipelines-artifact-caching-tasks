@@ -45,7 +45,7 @@ umh.mockUniversalCommand(
 
 tmr.setInput("keyFile", "**/*/yarn.lock");
 tmr.setInput("targetFolders", "**/*/node_modules");
-tmr.setInput("platIndependent", "true");
+tmr.setInput("platformIndependent", "true");
 
 // mock a specific module function called in task
 tmr.registerMock("fs", {

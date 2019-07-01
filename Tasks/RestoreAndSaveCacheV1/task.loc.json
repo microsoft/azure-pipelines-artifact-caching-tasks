@@ -40,6 +40,14 @@
       "required": "true"
     },
     {
+      "name": "platformIndependent",
+      "type": "boolean",
+      "label": "ms-resource:loc.input.label.platformIndependent",
+      "description": "Whether the cached artifact is platform independent (default is false).",
+      "defaultValue": false,
+      "required": "false"
+    },
+    {
       "name": "verbosity",
       "type": "pickList",
       "label": "ms-resource:loc.input.label.verbosity",

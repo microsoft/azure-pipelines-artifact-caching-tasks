@@ -26,14 +26,22 @@ export class cacheUtilities {
     contents = contents.replace(/(\r|\n)/gm, "");
     contents += salt.toString();
 
-    const hash = `${process.platform}-${crypto
+    const isPlatformIndependent =
+      tl.getInput("platformIndependent", false) === "true";
+
+    const prefix = isPlatformIndependent ? "" : `${process.platform}-`;
+
+    const hash = `${prefix}${crypto
       .createHash("sha256")
       .update(contents)
       .digest("hex")}`;
     return hash;
   };
 
-  public downloadCaches = async function(files: string[], destinationFolder: string) {
+  public downloadCaches = async function(
+    files: string[],
+    destinationFolder: string
+  ) {
     const hash: string = await this.hashFiles(files);
 
     // Make our working folder
@@ -79,7 +87,10 @@ export class cacheUtilities {
     tl.rmRF(tmp_cache);
   };
 
-  public uploadCaches = async function(keyFiles: string[], targetFolders: string[]) {
+  public uploadCaches = async function(
+    keyFiles: string[],
+    targetFolders: string[]
+  ) {
     if (targetFolders.length === 0) {
       console.log("Issue: no artifacts specified to cache");
       return;
@@ -96,7 +107,10 @@ export class cacheUtilities {
     }
     // If hash was not around during the restorecache step, we assume it was produced during build
     if (status === undefined) {
-      tl.setResult(tl.TaskResult.Skipped, `Not caching artifact produced during build: ${hash}`);
+      tl.setResult(
+        tl.TaskResult.Skipped,
+        `Not caching artifact produced during build: ${hash}`
+      );
       return;
     }
 
@@ -147,9 +161,10 @@ export class cacheUtilities {
         } else if (result.success) {
           console.log("Cache successfully saved");
         } else {
-          tl.warning("Cache unsuccessfully saved. Find more information in logs above");
+          tl.warning(
+            "Cache unsuccessfully saved. Find more information in logs above"
+          );
         }
-
       }
     } catch (err) {
       console.log(err);
@@ -190,7 +205,7 @@ export class cacheUtilities {
       const findOptions = {
         allowBrokenSymbolicLinks: false,
         followSpecifiedSymbolicLink: false,
-        followSymbolicLinks: false,
+        followSymbolicLinks: false
       } as tl.FindOptions;
 
       const files: string[] = tl.findMatch(
@@ -250,7 +265,7 @@ export class cacheUtilities {
       const findOptions = {
         allowBrokenSymbolicLinks: false,
         followSpecifiedSymbolicLink: false,
-        followSymbolicLinks: false,
+        followSymbolicLinks: false
       } as tl.FindOptions;
 
       const keyFiles: string[] = tl.findMatch(
