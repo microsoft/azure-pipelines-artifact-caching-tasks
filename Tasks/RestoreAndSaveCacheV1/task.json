@@ -9,7 +9,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 11
+    "Patch": 12
   },
   "instanceNameFormat": "Restore and save artifact based on: $(keyfile)",
   "inputs": [
@@ -62,12 +62,6 @@
         "Error": "Error",
         "Critical": "Citical"
       }
-    }
-  ],
-  "outputVariables": [
-    {
-      "name": "CacheRestored",
-      "description": "Set to `true` when the cache is successfully restored."
     }
   ],
   "dataSourceBindings": [
