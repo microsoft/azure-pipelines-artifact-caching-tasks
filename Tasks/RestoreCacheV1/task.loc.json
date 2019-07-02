@@ -9,7 +9,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 11
+    "Patch": 12
   },
   "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
   "inputs": [
@@ -45,6 +45,14 @@
       "label": "ms-resource:loc.input.label.platformIndependent",
       "description": "Whether the cached artifact is platform independent (default is false).",
       "defaultValue": false,
+      "required": "false"
+    },
+    {
+      "name": "alias",
+      "type": "string",
+      "label": "ms-resource:loc.input.label.alias",
+      "description": "An optional alias to the cache to control the name of the output variable (E.g. An alias of 'Build' sets the output variable 'CacheRestored-Build').",
+      "defaultValue": "",
       "required": "false"
     },
     {

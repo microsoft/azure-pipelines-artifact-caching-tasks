@@ -46,6 +46,14 @@
       "required": "false"
     },
     {
+      "name": "alias",
+      "type": "string",
+      "label": "Cache alias",
+      "description": "An optional alias to the cache to control the name of the output variable (E.g. An alias of 'Build' sets the output variable 'CacheRestored-Build').",
+      "defaultValue": "",
+      "required": "false"
+    },
+    {
       "name": "verbosity",
       "type": "pickList",
       "label": "Verbosity",

@@ -129,6 +129,41 @@ describe("RestoreCache tests", function() {
     done();
   });
 
+  it("RestoreCache runs successfully if cache hit for cache alias", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheCacheHitCacheAlias.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
+    assert(
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          process.platform
+        }-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
+    assert(
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored-Build=true"),
+      "'CacheRestored-Build' variable should be set to true"
+    );
+    assert(
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=true`),
+      "variable should be set to mark key as valid in build"
+    );
+
+    done();
+  });
+
   it("RestoreCache runs successfully if cache miss", (done: MochaDone) => {
     const tp = path.join(__dirname, "RestoreCacheCacheMiss.js");
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
@@ -158,6 +193,45 @@ describe("RestoreCache tests", function() {
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
     assert(
       tr.stdOutContained("set CacheRestored=false"),
+      "'CacheRestored' variable should be set to false"
+    );
+    assert(
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=false`),
+      "variable should be set to mark key as valid in build"
+    );
+
+    done();
+  });
+
+  it("RestoreCache runs successfully if cache miss for cache alias", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheCacheMissCacheAlias.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
+    assert(
+      tr.ran(
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
+          process.platform
+        }-${
+          Constants.Hash
+        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+      ),
+      "it should have run ArtifactTool"
+    );
+    assert(
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
+    assert(
+      tr.stdOutContained(`Cache miss:  ${process.platform}-${Constants.Hash}`),
+      "should have output stating cache miss"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored-Build=false"),
       "'CacheRestored' variable should be set to false"
     );
     assert(
