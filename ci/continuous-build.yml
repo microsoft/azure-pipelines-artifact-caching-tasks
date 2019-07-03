@@ -83,7 +83,7 @@ jobs:
         inputs:
           extensionVersion: "$(Build.BuildNumber)"
           extensionVisibility: public
-          updateTasksVersion: true
+          updateTasksVersion: false
 
       - task: CopyFiles@2
         displayName: "Copy Files to staging"
