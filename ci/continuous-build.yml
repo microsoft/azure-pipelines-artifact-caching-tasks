@@ -34,22 +34,22 @@ jobs:
           verbose: false
 
       - task: Gulp@0
-        displayName: 'gulp build'
+        displayName: "gulp build"
         inputs:
           targets: build
 
       - task: Gulp@0
-        displayName: 'gulp test'
+        displayName: "gulp test"
         inputs:
           targets: test
-          arguments: '--testResults=TESTRESULTS.xml'
+          arguments: "--testResults=TESTRESULTS.xml"
 
       - task: PublishTestResults@2
-        displayName: 'Publish Test Results **/TESTRESULTS.xml'
+        displayName: "Publish Test Results **/TESTRESULTS.xml"
         inputs:
-          testResultsFiles: '**/TESTRESULTS.xml'
+          testResultsFiles: "**/TESTRESULTS.xml"
         condition: succeededOrFailed()
-        
+
   - job: Package
     dependsOn: BuildAndTest
     pool:
@@ -69,12 +69,12 @@ jobs:
           verbose: false
 
       - task: Gulp@0
-        displayName: 'gulp build'
+        displayName: "gulp build"
         inputs:
           targets: build
 
       - task: ms-devlabs.vsts-developer-tools-build-tasks.tfx-installer-build-task.TfxInstaller@1
-        displayName: 'Use Node CLI for Azure DevOps (tfx-cli): v0.7.x'
+        displayName: "Use Node CLI for Azure DevOps (tfx-cli): v0.7.x"
         inputs:
           version: v0.7.x
 
@@ -90,6 +90,6 @@ jobs:
         inputs:
           Contents: "**/*.vsix"
           TargetFolder: "$(Build.ArtifactStagingDirectory)"
-      
+
       - task: PublishBuildArtifacts@1
         displayName: "Publish build artifacts"

@@ -11,9 +11,9 @@ This build task is meant to add an easy way to provide caching of intermediate b
 ```yaml
 - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreCacheV1.RestoreCache@1
   inputs:
-    keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
-    targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-    vstsFeed: '$(ArtifactFeed)'
+    keyfile: "**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock"
+    targetfolder: "**/node_modules, !**/node_modules/**/node_modules"
+    vstsFeed: "$(ArtifactFeed)"
 
 - script: |
     yarn install
@@ -21,14 +21,15 @@ This build task is meant to add an easy way to provide caching of intermediate b
 
 - task: 1ESLighthouseEng.PipelineArtifactCaching.SaveCacheV1.SaveCache@1
   inputs:
-    keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
-    targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-    vstsFeed: '$(ArtifactFeed)'
+    keyfile: "**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock"
+    targetfolder: "**/node_modules, !**/node_modules/**/node_modules"
+    vstsFeed: "$(ArtifactFeed)"
 ```
 
 Conceptually, this snippet creates a lookup key from the `keyfile` argument and checks the `vstsFeed` for a matching entry. If one exists, it will be downloaded and unpacked. After more `node_modules` are restored via `yarn` the `SaveCache` task runs to create a cache entry if it wasn't available previously (if a cache entry was downloaded, this is a no-op).
 
 Inputs:
+
 - `keyfile`: The file or pattern of files to use for creating the lookup key of the cache. Due to the nature of `node_modules` potentially having their own `yarn.lock` file, this snippet explicitly excludes that pattern to ensure there is a consistent lookup key before and after package restoration.
 - `targetfolder`: The file/folder or pattern of files/folders that you want to cache. The matching files/folders will be represented as the universal package that is uploaded to your Azure DevOps artifact feed.
 - `vstsFeed`: The guid representing the artifact feed in Azure DevOps meant to store the build's caches.
@@ -38,9 +39,9 @@ If you do not want to add two build steps to your build definition, you can also
 ```yaml
 - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
   inputs:
-    keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
-    targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-    vstsFeed: '$(ArtifactFeed)'
+    keyfile: "**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock"
+    targetfolder: "**/node_modules, !**/node_modules/**/node_modules"
+    vstsFeed: "$(ArtifactFeed)"
 
 - script: |
     yarn install
@@ -56,14 +57,34 @@ In the following example, the 'yarn' task will only run if there was not a cache
 ```yaml
 - task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
   inputs:
-    keyfile: '**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock'
-    targetfolder: '**/node_modules, !**/node_modules/**/node_modules'
-    vstsFeed: '$(ArtifactFeed)'
+    keyfile: "**/yarn.lock, !**/node_modules/**/yarn.lock, !**/.*/**/yarn.lock"
+    targetfolder: "**/node_modules, !**/node_modules/**/node_modules"
+    vstsFeed: "$(ArtifactFeed)"
 
 - script: |
     yarn install
   displayName: Install Dependencies
   condition: ne(variables['CacheRestored'], 'true')
+```
+
+### Cache aliases
+
+By default, the name of the variable used for optimistic cache restoration defaults to `CacheRestored`. However, this can be problematic in restoring multiple caches in the same build (E.g. caches for build output and for packages). To work around this, you may set an optional task variable to control the naming of the `CacheRestored` variable.
+
+For example:
+
+```yaml
+- task: 1ESLighthouseEng.PipelineArtifactCaching.RestoreAndSaveCacheV1.RestoreAndSaveCache@1
+  inputs:
+    keyfile: "yarn.lock"
+    targetfolder: "node_modules"
+    vstsFeed: "$(ArtifactFeed)"
+    alias: "Packages"
+
+- script: |
+    yarn install
+  displayName: Install Dependencies
+  condition: ne(variables['CacheRestored-Packages'], 'true')
 ```
 
 ## Platform independent caches
@@ -79,7 +100,6 @@ For example:
     targetfolder: bin
     vstsFeed: $(ArtifactFeed)
     platformIndependent: true
-
 ```
 
 ## Onboarding
@@ -133,13 +153,13 @@ npm install
 ### Build
 
 The following instructions demonstrate how to build and test either all or a specific task. The output will be sent to
-the `_build` directory.  You can then use the tfx client to upload this to your server for testing.
+the `_build` directory. You can then use the tfx client to upload this to your server for testing.
 
 The build will also generate a `task.loc.json` and an english strings file under `Strings` in your source tree. You should check these back in. Another localization process will create the other strings files.
 
 To build all tasks:
 
-``` bash
+```bash
 npm run build
 ```
 
@@ -151,7 +171,7 @@ node make.js build --task RestoreCacheV1
 
 ## Contributing
 
-This project welcomes contributions and suggestions.  Most contributions require you to agree to a
+This project welcomes contributions and suggestions. Most contributions require you to agree to a
 Contributor License Agreement (CLA) declaring that you have the right to, and actually do, grant us
 the rights to use your contribution. For details, visit https://cla.microsoft.com.
 

@@ -62,6 +62,10 @@ export class cacheUtilities {
     try {
       const result = await universalPackages.download(hash, tmp_cache);
 
+      const alias = tl.getInput("alias", false);
+      const output =
+        alias && alias.length > 0 ? `CacheRestored-${alias}` : "CacheRestored";
+
       if (!result.toolRan) {
         tl.warning("Issue running universal packages tools");
       } else if (result.success) {
@@ -70,14 +74,14 @@ export class cacheUtilities {
 
           // Set variable to track whether or not we downloaded cache (i.e. it already existed)
           tl.setVariable(hash, "true");
-          tl.setVariable("CacheRestored", "true");
+          tl.setVariable(output, "true");
           return;
         } catch (err) {
           console.log(err);
         }
       } else {
         console.log("Cache miss: ", hash);
-        tl.setVariable("CacheRestored", "false");
+        tl.setVariable(output, "false");
         tl.setVariable(hash, "false");
       }
     } catch (err) {
