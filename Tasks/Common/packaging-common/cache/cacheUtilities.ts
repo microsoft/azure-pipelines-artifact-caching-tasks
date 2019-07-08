@@ -291,6 +291,15 @@ export class cacheUtilities {
         tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
       const allPaths = tl.find(searchDirectory);
       const matchedPaths: string[] = tl.match(allPaths, targetPatterns);
+
+      const exactMatches = targetPatterns.filter(tp =>
+        allPaths.some(p =>
+          p.startsWith(tp.endsWith(path.sep) ? tp : `${tp}${path.sep}`)
+        )
+      );
+
+      matchedPaths.push(...exactMatches.filter(e => !matchedPaths.includes(e)));
+
       const targetFolders: string[] = matchedPaths
         .filter((itemPath: string) => tl.stats(itemPath).isDirectory())
         .map(folder => path.relative(searchDirectory, folder));
@@ -301,7 +310,7 @@ export class cacheUtilities {
       }
 
       tl.debug("\n\n\n-----------------------------");
-      targetFolders.forEach(f => tl.debug(f));
+      targetFolders.forEach(f => tl.debug(`Found target folder: ${f}`));
       tl.debug("-----------------------------\n\n\n");
 
       await this.uploadCaches(keyFiles, targetFolders);

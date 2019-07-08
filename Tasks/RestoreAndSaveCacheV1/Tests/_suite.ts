@@ -242,6 +242,37 @@ describe("RestoreCache tests", function() {
     done();
   });
 
+  it("RestoreCache runs successfully if cache miss for dot syntax keyfile", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheCacheMissDotKeyFile.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
+
+    assert(
+      tr.stdOutContained("Found key file: .commit"),
+      "should have found keyfile"
+    );
+
+    assert(
+      tr.stdOutContained("ArtifactTool.exe output"),
+      "should have ArtifactTool output"
+    );
+    assert(
+      tr.stdOutContained(`Cache miss:`),
+      "should have output stating cache miss"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+    assert(
+      tr.stdOutContained("set CacheRestored=false"),
+      "'CacheRestored' variable should be set to false"
+    );
+
+    done();
+  });
+
   it("RestoreCache handles artifact permissions errors gracefully", (done: MochaDone) => {
     const tp = path.join(__dirname, "RestoreCachePermissionsError.js");
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
@@ -493,6 +524,57 @@ describe("SaveCache tests", function() {
     const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
 
     tr.run();
+
+    assert(
+      tr.stdOutContained("Cache successfully saved"),
+      "should have saved new cache entry"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+
+    done();
+  });
+
+  it("SaveCache creates an archive if cache miss for dot syntax keyfile", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheCacheMissDotKeyFile.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(
+      tr.stdOutContained("Found key file: .commit"),
+      "should have found keyfile '.commit'"
+    );
+
+    assert(
+      tr.stdOutContained("Cache successfully saved"),
+      "should have saved new cache entry"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+
+    done();
+  });
+
+  it("SaveCache creates an archive if cache miss for dot target syntax folder patterns", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheCacheMissDotTarget.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(
+      tr.stdOutContained("Found target folder: ../src/out/out-build"),
+      "should match out-build target folders"
+    );
+    assert(
+      tr.stdOutContained("Found target folder: ../.build"),
+      "should match .build target folders"
+    );
+
+    assert(
+      (tr.stdout.match(/Found target folder: /g) || []).length === 2,
+      "should find 2 target folders to cache"
+    );
 
     assert(
       tr.stdOutContained("Cache successfully saved"),
