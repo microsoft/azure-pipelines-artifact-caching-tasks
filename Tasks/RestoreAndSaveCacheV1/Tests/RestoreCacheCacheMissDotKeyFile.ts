@@ -7,7 +7,7 @@ import { UniversalMockHelper } from "packaging-common/Tests/UniversalMockHelper"
 const taskPath = path.join(__dirname, "..", "restorecache.js");
 const tmr: tmrm.TaskMockRunner = new tmrm.TaskMockRunner(taskPath);
 
-const hash = "057b9e891c2548f0ed5583b07f7cb08d0a77eba71a37511fb55dbc67e6c0df25";
+const hash = "053a624fd3674f0969897b5c62a6c7debbac2b3a7b368c4e4bd9b583c69614db";
 
 const a: TaskLibAnswers = {
   findMatch: {
@@ -59,8 +59,10 @@ tmr.registerMock("fs", {
         }
   ): string {
     if (path.endsWith(".commit")) {
+      console.log("PATH", path);
+
       const segments = path.split("/");
-      return segments.splice(segments.length - 2).join("/");
+      return segments.splice(segments.length - 1).join("/");
     }
     return fs.readFileSync(path, options);
   },
