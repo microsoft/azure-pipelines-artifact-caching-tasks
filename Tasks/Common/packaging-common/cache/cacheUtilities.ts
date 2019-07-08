@@ -287,21 +287,10 @@ export class cacheUtilities {
       }
 
       // Construct this list of artifacts to store. These are relative to prevent the full path from
-      const matchOptions: tl.MatchOptions = {
-        dot: true,
-        nocase: true,
-        debug: true
-      };
-
       const searchDirectory =
         tl.getVariable("System.DefaultWorkingDirectory") || process.cwd();
       const allPaths = tl.find(searchDirectory);
-      const matchedPaths: string[] = tl.match(
-        allPaths,
-        targetPatterns,
-        null,
-        matchOptions
-      );
+      const matchedPaths: string[] = tl.match(allPaths, targetPatterns);
 
       const exactMatches = targetPatterns.filter(tp =>
         allPaths.some(p =>
