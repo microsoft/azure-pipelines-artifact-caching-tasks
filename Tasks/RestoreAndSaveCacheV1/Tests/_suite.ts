@@ -503,4 +503,34 @@ describe("SaveCache tests", function() {
 
     done();
   });
+
+  it("SaveCache creates an archive if cache miss for multiple target folder patterns", (done: MochaDone) => {
+    const tp = path.join(__dirname, "SaveCacheCacheMissDotTarget.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(
+      tr.stdOutContained("Found target folder: ../src/out/out-build"),
+      "should match out-build target folders"
+    );
+    assert(
+      tr.stdOutContained("Found target folder: ../.build"),
+      "should match .build target folders"
+    );
+
+    assert(
+      (tr.stdout.match(/Found target folder: /g) || []).length === 2,
+      "should find 2 target folders to cache"
+    );
+
+    assert(
+      tr.stdOutContained("Cache successfully saved"),
+      "should have saved new cache entry"
+    );
+    assert(tr.succeeded, "should have succeeded");
+    assert.equal(tr.errorIssues.length, 0, "should have no errors");
+
+    done();
+  });
 });
