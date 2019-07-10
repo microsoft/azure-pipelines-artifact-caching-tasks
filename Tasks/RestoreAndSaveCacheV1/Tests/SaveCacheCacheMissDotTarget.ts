@@ -12,7 +12,7 @@ const hash = "caa22019107de89a8bbf9efd8a5273b37fa80bfb9c560e0bc349d5afd6df2ddc";
 const a: TaskLibAnswers = {
   findMatch: {
     ".build/commit": [".build/commit"],
-    ".build": [".build"],
+    ".build": [".build", ".build/commit"],
     "**/out-build": ["src/out/out-build"]
   },
   find: {
@@ -34,9 +34,10 @@ const a: TaskLibAnswers = {
       }
     },
     ".build": {
-      isDirectory() {
-        return true;
-      }
+      isDirectory: true
+    },
+    ".build/commit": {
+      isDirectory: false
     }
   },
   exist: {
@@ -69,7 +70,7 @@ umh.mockUniversalCommand(
 );
 
 tmr.setInput("keyFile", ".build/commit");
-tmr.setInput("targetFolder", ".build, **/out-build");
+tmr.setInput("targetFolder", ".build");
 
 const key = `${process.platform}-${hash}`.toUpperCase();
 process.env[key] = "false";
