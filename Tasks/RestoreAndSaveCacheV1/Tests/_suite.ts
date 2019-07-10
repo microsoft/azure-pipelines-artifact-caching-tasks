@@ -563,17 +563,13 @@ describe("SaveCache tests", function() {
     tr.run();
 
     assert(
-      tr.stdOutContained("Found target folder: ../src/out/out-build"),
-      "should match out-build target folders"
-    );
-    assert(
       tr.stdOutContained("Found target folder: ../.build"),
       "should match .build target folders"
     );
 
     assert(
-      (tr.stdout.match(/Found target folder: /g) || []).length === 2,
-      "should find 2 target folders to cache"
+      (tr.stdout.match(/Found target folder: /g) || []).length === 1,
+      "should find 1 target folders to cache"
     );
 
     assert(
