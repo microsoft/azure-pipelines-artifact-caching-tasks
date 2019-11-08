@@ -48,6 +48,14 @@
       "required": "false"
     },
     {
+      "name": "dryRun",
+      "type": "boolean",
+      "label": "ms-resource:loc.input.label.dryRun",
+      "description": "Check if the cache exists, without downloading it (default is false).",
+      "defaultValue": false,
+      "required": "false"
+    },
+    {
       "name": "alias",
       "type": "string",
       "label": "ms-resource:loc.input.label.alias",

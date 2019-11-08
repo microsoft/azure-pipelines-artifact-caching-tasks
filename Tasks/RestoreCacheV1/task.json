@@ -46,6 +46,14 @@
       "required": "false"
     },
     {
+      "name": "dryRun",
+      "type": "boolean",
+      "label": "Dry run",
+      "description": "Check if the cache exists, without downloading it (default is false).",
+      "defaultValue": false,
+      "required": "false"
+    },
+    {
       "name": "alias",
       "type": "string",
       "label": "Cache alias",
