@@ -64,8 +64,6 @@ export class cacheUtilities {
     const alias = tl.getInput("alias", false);
 
     if (dryRun) {
-      console.log("DRY RUN", dryRun);
-      
       const packageExists = await doesPackageExist(hash);
       
       const output = alias && alias.length > 0 ? `CacheExists-${alias}` : "CacheExists";

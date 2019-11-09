@@ -45,8 +45,6 @@ export function runArtifactTool(artifactToolPath: string, command: string[], exe
         return tl.execSync(artifactToolPath, command, execOptions);
     } else {
         fs.chmodSync(artifactToolPath, "755");
-        console.log("TOOL PATH", artifactToolPath);
-        
         if (!execOptions.silent) {
             execOptions.outStream.write(getCommandString(artifactToolPath, command) + os.EOL);
         }
