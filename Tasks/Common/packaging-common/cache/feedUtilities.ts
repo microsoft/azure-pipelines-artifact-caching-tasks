@@ -18,6 +18,8 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
     .toLowerCase();
 
   const version = `1.0.0-${hash}`;
+  console.log(version);
+
   const accessToken = pkgLocationUtils.getSystemAccessToken();
   const collectionUri = process.env.SYSTEM_TEAMFOUNDATIONCOLLECTIONURI;
 
@@ -44,8 +46,12 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
   };
   try {
     const result = await Axios.get<IPackage>(url, config);
+    tl.debug(result.toString());
+
     return result.data.version === version;
   } catch (err) {
+    tl.debug(err.toString());
+
     return false;
   }
 }

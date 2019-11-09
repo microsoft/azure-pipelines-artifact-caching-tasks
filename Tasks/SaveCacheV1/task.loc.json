@@ -9,7 +9,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 15
+    "Patch": 18
   },
   "instanceNameFormat": "ms-resource:loc.instanceNameFormat",
   "inputs": [
@@ -44,14 +44,6 @@
       "type": "boolean",
       "label": "ms-resource:loc.input.label.platformIndependent",
       "description": "Whether the cached artifact is platform independent (default is false).",
-      "defaultValue": false,
-      "required": "false"
-    },
-    {
-      "name": "dryRun",
-      "type": "boolean",
-      "label": "ms-resource:loc.input.label.dryRun",
-      "description": "Check if the cache exists, without downloading it (default is false).",
       "defaultValue": false,
       "required": "false"
     },

@@ -9,7 +9,7 @@
   "version": {
     "Major": 1,
     "Minor": 0,
-    "Patch": 15
+    "Patch": 18
   },
   "instanceNameFormat": "Save artifact based on: $(keyfile)",
   "inputs": [
@@ -42,14 +42,6 @@
       "type": "boolean",
       "label": "Platform Independent?",
       "description": "Whether the cached artifact is platform independent (default is false).",
-      "defaultValue": false,
-      "required": "false"
-    },
-    {
-      "name": "dryRun",
-      "type": "boolean",
-      "label": "Dry run",
-      "description": "Check if the cache exists, without downloading it (default is false).",
       "defaultValue": false,
       "required": "false"
     },
