@@ -68,7 +68,7 @@ export class cacheUtilities {
       
       const output = alias && alias.length > 0 ? `CacheExists-${alias}` : "CacheExists";
       tl.setVariable(output, packageExists ? "true" : "false");
-      tl.setVariable(hash, "false");
+      tl.setVariable(hash, packageExists ? "true" : "false");
 
       return;
     }
