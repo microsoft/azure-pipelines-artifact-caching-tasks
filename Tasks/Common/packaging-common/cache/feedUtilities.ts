@@ -18,8 +18,6 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
     .toLowerCase();
 
   const version = `1.0.0-${hash}`;
-  console.log(version);
-
   const accessToken = pkgLocationUtils.getSystemAccessToken();
   const collectionUri = process.env.SYSTEM_TEAMFOUNDATIONCOLLECTIONURI;
 
