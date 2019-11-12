@@ -76,7 +76,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
                 success: false,
               };
         }
-
+ 
         return {
             toolRan: true,
             success: false,

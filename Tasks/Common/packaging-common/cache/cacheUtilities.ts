@@ -8,6 +8,7 @@ import shell = require("shelljs");
 import tl = require("azure-pipelines-task-lib/task");
 
 import { UniversalPackages } from "./universalPackages";
+import { doesPackageExist } from "./feedUtilities";
 const universalPackages = new UniversalPackages();
 
 const isWin = process.platform === "win32";
@@ -59,10 +60,27 @@ export class cacheUtilities {
       tarballPath = "/" + tarballPath.replace(":", "").replace(/\\/g, "/");
     }
 
+    const dryRun = tl.getBoolInput("dryRun", false);
+    const alias = tl.getInput("alias", false);
+
+    if (dryRun) {
+      try {
+        const packageExists = await doesPackageExist(hash);
+
+        const output =
+          alias && alias.length > 0 ? `CacheExists-${alias}` : "CacheExists";
+        tl.setVariable(output, packageExists ? "true" : "false");
+        tl.setVariable(hash, packageExists ? "true" : "false");
+      } catch (err) {
+        console.log(err);
+      }
+
+      return;
+    }
+
     try {
       const result = await universalPackages.download(hash, tmp_cache);
 
-      const alias = tl.getInput("alias", false);
       const output =
         alias && alias.length > 0 ? `CacheRestored-${alias}` : "CacheRestored";
 
@@ -145,7 +163,9 @@ export class cacheUtilities {
     }
 
     try {
-      const { stderr: error } = shell.exec(
+      const {
+        stderr: error
+      } = shell.exec(
         `tar -C "${tarballParentDir}" -czf "${tarballPath}" ${targetFolders
           .map(t => `\"${t}\"`)
           .join(" ")}`,

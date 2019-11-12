@@ -1,7 +1,6 @@
 import * as path from "path";
 import * as assert from "assert";
 import * as ttm from "azure-pipelines-task-lib/mock-test";
-import { platform } from "os";
 import { Constants } from "./Constants";
 
 before(function() {
@@ -70,11 +69,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          process.platform
-        }-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -105,9 +100,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool for plat-independent hash"
     );
@@ -138,11 +131,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          process.platform
-        }-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -173,11 +162,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          process.platform
-        }-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -212,11 +197,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          process.platform
-        }-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -282,11 +263,7 @@ describe("RestoreCache tests", function() {
     assert(tr.invokedToolCount === 1, "should have run ArtifactTool once");
     assert(
       tr.ran(
-        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${
-          process.platform
-        }-${
-          Constants.Hash
-        } --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
+        `/users/tmp/ArtifactTool.exe universal download --feed node-package-feed --service https://example.visualstudio.com/defaultcollection --package-name builddefinition1 --package-version 1.0.0-${process.platform}-${Constants.Hash} --path /users/home/directory/tmp_cache --patvar UNIVERSAL_DOWNLOAD_PAT --verbosity verbose`
       ),
       "it should have run ArtifactTool"
     );
@@ -578,6 +555,52 @@ describe("SaveCache tests", function() {
     );
     assert(tr.succeeded, "should have succeeded");
     assert.equal(tr.errorIssues.length, 0, "should have no errors");
+
+    done();
+  });
+});
+
+describe("DryRun tests", function() {
+  before(function() {
+    process.env["SYSTEM_PULLREQUEST_ISFORK"] = "false";
+  });
+
+  after(() => {});
+
+  it("RestoreCache sets correct output if cache exists", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheDryRunCacheExists.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(
+      tr.stdOutContained("set CacheExists=true"),
+      "should state that cache exists"
+    );
+
+    assert(
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=true`),
+      "variable should be set to mark key as valid in build"
+    );
+
+    done();
+  });
+
+  it("RestoreCache sets correct output if cache does not exists", (done: MochaDone) => {
+    const tp = path.join(__dirname, "RestoreCacheDryRunCacheNotExists.js");
+    const tr: ttm.MockTestRunner = new ttm.MockTestRunner(tp);
+
+    tr.run();
+
+    assert(
+      tr.stdOutContained("set CacheExists=false"),
+      "should state that cache exists"
+    );
+
+    assert(
+      tr.stdOutContained(`${process.platform}-${Constants.Hash}=false`),
+      "variable should be set to mark key as valid in build"
+    );
 
     done();
   });
