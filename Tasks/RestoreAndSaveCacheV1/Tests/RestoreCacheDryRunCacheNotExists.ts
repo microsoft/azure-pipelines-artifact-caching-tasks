@@ -1,7 +1,6 @@
 import * as fs from "fs";
 import * as path from "path";
 import * as tmrm from "azure-pipelines-task-lib/mock-run";
-import { Constants } from "./Constants";
 import {
   registerFeedUtilityMock,
   IMockResponse
@@ -31,12 +30,7 @@ tmr.setInput("targetFolders", "**/*/node_modules");
 tmr.setInput("dryRun", "true");
 
 const response: IMockResponse = {
-  responseCode: 200,
-  data: {
-    id: "1234-5678-90123-45678",
-    name: "builddefinition",
-    version: `1.0.0-${process.platform}-${Constants.Hash}`
-  }
+  responseCode: 404
 };
 
 registerFeedUtilityMock(tmr, response);

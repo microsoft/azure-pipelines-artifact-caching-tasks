@@ -1,6 +1,6 @@
-import * as pkgLocationUtils from '../locationUtilities';
-import * as tl from 'azure-pipelines-task-lib';
-import Axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import * as pkgLocationUtils from "../locationUtilities";
+import * as tl from "azure-pipelines-task-lib";
+import Axios, { AxiosRequestConfig } from "axios";
 
 interface IPackage {
   id: string;
@@ -9,11 +9,11 @@ interface IPackage {
 }
 
 export async function doesPackageExist(hash: string): Promise<boolean> {
-  const feedId = tl.getInput('feedList');
+  const feedId = tl.getInput("feedList");
   // Getting package name from hash
   const packageId = tl
-    .getVariable('Build.DefinitionName')
-    .replace(/\s/g, '')
+    .getVariable("Build.DefinitionName")
+    .replace(/\s/g, "")
     .substring(0, 255)
     .toLowerCase();
 
@@ -23,7 +23,7 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
   const accessToken = pkgLocationUtils.getSystemAccessToken();
   const collectionUri = process.env.SYSTEM_TEAMFOUNDATIONCOLLECTIONURI;
 
-  let instance: string = '';
+  let instance: string = "";
   const legacyRegex = /https:\/\/(\S+).visualstudio.com\S+/g;
   const newRegex = /https:\/\/dev.azure.com\/(\S+)\//g;
 
@@ -41,12 +41,13 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
   const config: AxiosRequestConfig = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
-      Accept: 'application/json'
+      Accept: "application/json"
     }
   };
   try {
     const result = await Axios.get<IPackage>(url, config);
-    tl.debug(result.toString());
+
+    tl.debug(JSON.stringify(result.data));
 
     return result.data.version === version;
   } catch (err) {
