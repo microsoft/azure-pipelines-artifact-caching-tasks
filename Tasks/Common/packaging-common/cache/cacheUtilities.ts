@@ -64,11 +64,16 @@ export class cacheUtilities {
     const alias = tl.getInput("alias", false);
 
     if (dryRun) {
-      const packageExists = await doesPackageExist(hash);
-      
-      const output = alias && alias.length > 0 ? `CacheExists-${alias}` : "CacheExists";
-      tl.setVariable(output, packageExists ? "true" : "false");
-      tl.setVariable(hash, packageExists ? "true" : "false");
+      try {
+        const packageExists = await doesPackageExist(hash);
+
+        const output =
+          alias && alias.length > 0 ? `CacheExists-${alias}` : "CacheExists";
+        tl.setVariable(output, packageExists ? "true" : "false");
+        tl.setVariable(hash, packageExists ? "true" : "false");
+      } catch (err) {
+        console.log(err);
+      }
 
       return;
     }
@@ -158,7 +163,9 @@ export class cacheUtilities {
     }
 
     try {
-      const { stderr: error } = shell.exec(
+      const {
+        stderr: error
+      } = shell.exec(
         `tar -C "${tarballParentDir}" -czf "${tarballPath}" ${targetFolders
           .map(t => `\"${t}\"`)
           .join(" ")}`,

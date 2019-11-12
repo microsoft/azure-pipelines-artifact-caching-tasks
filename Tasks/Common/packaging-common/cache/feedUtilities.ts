@@ -34,6 +34,8 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
     instance = legacyUrl[1];
   } else if (newUrl) {
     instance = newUrl[1];
+  } else {
+    throw `Unable to parse collection uri: '${collectionUri}'`;
   }
 
   const url = `https://pkgs.dev.azure.com/${instance}/_apis/packaging/feeds/${feedId}/upack/packages/${packageId}/versions/${version}?api-version=5.1-preview.1`;
