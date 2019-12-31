@@ -116,6 +116,8 @@ The task is designed to only cache artifacts that are produced within the build'
 
 The task skips restoring and saving caches on forked repositories by design. This is a security measure to protect cached artifacts from forked sources and a limitation from the Azure Artifacts permissions model (users of forked repositories don't have access to download these artifacts).
 
+The task is only available to be used within Azure DevOps Services because Azure DevOps Server does not support Universal Packages.
+
 ## How to build
 
 ### Prerequisites: Node and NPM
