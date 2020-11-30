@@ -35,7 +35,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
 
         // Getting package name from hash
         const packageId = tl.getVariable('Build.DefinitionName')
-            .replace(/\s/g, "")
+            .replace(/[^a-z0-9\-]/g, "")
             .substring(0, 255)
             .toLowerCase();
 

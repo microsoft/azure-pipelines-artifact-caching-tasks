@@ -35,7 +35,7 @@ export async function run(artifactToolPath: string, hash: string, targetFolder: 
         serviceUri = tl.getEndpointUrl("SYSTEMVSSCONNECTION", false);
 
         packageName = tl.getVariable('Build.DefinitionName')
-            .replace(/\s/g, "")
+            .replace(/[^a-z0-9\-]/g, "")
             .substring(0, 255)
             .toLowerCase();
 
