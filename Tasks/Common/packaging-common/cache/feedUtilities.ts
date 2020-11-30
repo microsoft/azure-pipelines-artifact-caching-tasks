@@ -13,7 +13,7 @@ export async function doesPackageExist(hash: string): Promise<boolean> {
   // Getting package name from hash
   const packageId = tl
     .getVariable("Build.DefinitionName")
-    .replace(/\s/g, "")
+    .replace(/[^a-z0-9\-]/g, "")
     .substring(0, 255)
     .toLowerCase();
 
