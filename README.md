@@ -1,3 +1,7 @@
+## Attention
+
+The tasks contained within this repository are not maintained at this time. Instead, please use the built-in [Pipeline Caching](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/caching?view=azure-devops) tasks for caching intermediate artifacts in Azure Pipelines.
+
 # Azure Pipelines Artifact Caching Tasks
 
 [![Build Status](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_apis/build/status/Microsoft.azure-pipelines-artifact-caching-tasks?branchName=master)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_build/latest?definitionId=17&branchName=master) [![Release status](https://vsrm.dev.azure.com/1es-cat/_apis/public/Release/badge/73af267c-80da-42c5-b634-ef63bb6d61fc/1/1)](https://dev.azure.com/1es-cat/azure-pipelines-artifact-caching-tasks/_release?definitionId=1)
